@@ -3,12 +3,10 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/Bruno/Documents/ORT/Obligatorios/Algoritmos%201/Obligatorio-algoritmos/src/sistemaAutogestion/Sistema.java</file>
-            <file>file:/C:/Users/Bruno/Documents/ORT/Obligatorios/Algoritmos%201/Obligatorio-algoritmos/src/tads/ListaNodos.java</file>
-            <file>file:/C:/Users/Bruno/Documents/ORT/Obligatorios/Algoritmos%201/Obligatorio-algoritmos/test/sistemaAutogestion/Test3_02ListarUsuarios.java</file>
-            <file>file:/C:/Users/Bruno/Documents/ORT/Obligatorios/Algoritmos%201/Obligatorio-algoritmos/src/tads/NodoLista.java</file>
-            <file>file:/C:/Users/Bruno/Documents/ORT/Obligatorios/Algoritmos%201/Obligatorio-algoritmos/src/tads/ILista.java</file>
-            <file>file:/C:/Users/Bruno/Documents/ORT/Obligatorios/Algoritmos%201/Obligatorio-algoritmos/src/dominio/Bicicleta.java</file>
+            <file>file:/C:/Users/Bruno/Documents/ORT/Obligatorios/Algoritmos%201/Algoritmos-obligatorio/src/sistemaAutogestion/Sistema.java</file>
+            <file>file:/C:/Users/Bruno/Documents/ORT/Obligatorios/Algoritmos%201/Algoritmos-obligatorio/test/sistemaAutogestion/Test3_03ListarBicisEnDeposito.java</file>
+            <file>file:/C:/Users/Bruno/Documents/ORT/Obligatorios/Algoritmos%201/Algoritmos-obligatorio/src/dominio/Bicicleta.java</file>
+            <file>file:/C:/Users/Bruno/Documents/ORT/Obligatorios/Algoritmos%201/Algoritmos-obligatorio/src/tads/ListaNodos.java</file>
         </group>
     </open-files>
 </project-private>
