@@ -122,20 +122,13 @@ public class Sistema implements IObligatorio {
             return Retorno.error1();
         }
 
-        NodoLista nodoEstacion = bicicletasEnEstaciones.obtenerElemento(new Bicicleta(codigo));
-        NodoLista nodoDeposito = bicicletasEnDeposito.obtenerElemento(new Bicicleta(codigo));
+        NodoLista nodo = encontrarBicicleta(codigo);
 
-        if (nodoEstacion == null && nodoDeposito == null) {
+        if (nodo == null) {
             return Retorno.error2();
         }
 
-        Bicicleta b = new Bicicleta();
-
-        if (nodoEstacion != null) {
-            b = (Bicicleta) nodoEstacion.getDato();
-        } else if (nodoDeposito != null) {
-            b = (Bicicleta) nodoDeposito.getDato();
-        }
+        Bicicleta b = (Bicicleta)nodo.getDato();
 
         if (b.getEstado().contains("Alquilada")) {
             return Retorno.error3();
@@ -270,21 +263,28 @@ public class Sistema implements IObligatorio {
         return Retorno.noImplementada();
     }
 
-    //para Tests
+    // Métodos custom 
+    
+    public NodoLista<Bicicleta> encontrarBicicleta(String codigo) {
+
+        NodoLista nodo = bicicletasEnEstaciones.obtenerElemento(new Bicicleta(codigo));
+
+        if (nodo == null) {
+            nodo = bicicletasEnDeposito.obtenerElemento(new Bicicleta(codigo));
+        }
+
+        return nodo;
+    }
+    // Para Tests
     public void cambiarEstadoBicicleta(String codigo, String estado) {
 
-        NodoLista nodoEstaciones = bicicletasEnEstaciones.obtenerElemento(new Bicicleta(codigo));
-        NodoLista nodoDeposito = bicicletasEnDeposito.obtenerElemento(new Bicicleta(codigo));
+        NodoLista nodo = encontrarBicicleta(codigo);
 
-        Bicicleta b = new Bicicleta();
-
-        if (nodoEstaciones != null) {
-            b = (Bicicleta) nodoEstaciones.getDato();
-        } else if (nodoDeposito != null) {
-            b = (Bicicleta) nodoDeposito.getDato();
-        } else {
+        if (nodo == null) {
             System.out.println("No se encontró la bicicleta");
         }
+
+        Bicicleta b = (Bicicleta) nodo.getDato();
 
         if (b != null && b.getEstado() == "Disponible") {
             if (estado.contains("Alquilada")) {
@@ -297,16 +297,5 @@ public class Sistema implements IObligatorio {
                 System.out.println("El estado no es válido");
             }
         }
-    }
-
-    public NodoLista<Bicicleta> encontrarBicicleta(String codigo) {
-
-        NodoLista nodo = bicicletasEnEstaciones.obtenerElemento(new Bicicleta(codigo));
-
-        if (nodo == null) {
-            nodo = bicicletasEnDeposito.obtenerElemento(new Bicicleta(codigo));
-        }
-
-        return nodo;
     }
 }
