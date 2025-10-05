@@ -23,20 +23,16 @@ public class Sistema implements IObligatorio {
 
     public static void main(String[] args) {
         Sistema sistema = new Sistema();
-        sistema.usuarios = new ListaNodos<Usuario>();
+        String[][] matt = {};
 
-        sistema.registrarBicicleta("ABC123", "MOUNTAIN");
-        sistema.registrarBicicleta("BCD243", "URBANA");
-        sistema.registrarBicicleta("ABG347", "ELECTRICA");
+        String[][] matriz
+                = {{"o", "o", "E4", "o", "E3"},
+                {"E3", "E3", "E3", "E3", "E3"},
+                {"o", "E3", "E3", "E3", "E4"},
+                {"o", "o", "E3", "o", "o"},
+                {"E3", "o", "E5", "o", "E3"}
+                };
 
-        Usuario usu1 = new Usuario("48027123", "Bruno");
-        Usuario usu2 = new Usuario("23123242", "Juan");
-
-        sistema.usuarios.agregarFinal(usu1);
-        sistema.usuarios.agregarFinal(usu2);
-
-        System.out.println(
-                sistema.encontrarBicicleta("ABC123").getDato());
     }
 
     @Override
@@ -128,7 +124,7 @@ public class Sistema implements IObligatorio {
             return Retorno.error2();
         }
 
-        Bicicleta b = (Bicicleta)nodo.getDato();
+        Bicicleta b = (Bicicleta) nodo.getDato();
 
         if (b.getEstado().contains("Alquilada")) {
             return Retorno.error3();
@@ -264,7 +260,6 @@ public class Sistema implements IObligatorio {
     }
 
     // Métodos custom 
-    
     public NodoLista<Bicicleta> encontrarBicicleta(String codigo) {
 
         NodoLista nodo = bicicletasEnEstaciones.obtenerElemento(new Bicicleta(codigo));
@@ -275,6 +270,7 @@ public class Sistema implements IObligatorio {
 
         return nodo;
     }
+
     // Para Tests
     public void cambiarEstadoBicicleta(String codigo, String estado) {
 
