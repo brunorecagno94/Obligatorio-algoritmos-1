@@ -41,13 +41,14 @@ public class Usuario implements Comparable {
 
     @Override
     public String toString() {
-        return "Nombre: " + nombre + ", Cedula: " + cedula;
+        return nombre + "#" + cedula;
     }
 
     
     @Override
     public int compareTo(Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Usuario other = (Usuario)o;
+       return this.cedula.compareTo(other.cedula);
     }
 
     @Override

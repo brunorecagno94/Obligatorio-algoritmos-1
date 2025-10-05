@@ -3,6 +3,8 @@ package sistemaAutogestion;
 import tads.ListaNodos;
 import tads.NodoLista;
 import dominio.*;
+import java.util.HashSet;
+import java.util.Set;
 
 //Bruno Recagno-333245, Victoria Calvo-339977
 public class Sistema implements IObligatorio {
@@ -10,11 +12,25 @@ public class Sistema implements IObligatorio {
     ListaNodos<Estacion> estaciones;
     ListaNodos<Usuario> usuarios;
     ListaNodos<Bicicleta> bicicletas;
-     
+
     public Sistema() {
         this.estaciones = new ListaNodos<Estacion>();
         this.usuarios = new ListaNodos<Usuario>();
         this.bicicletas = new ListaNodos<Bicicleta>();
+    }
+
+    public static void main(String[] args) {
+        Sistema sistema = new Sistema();
+        sistema.usuarios = new ListaNodos<Usuario>();
+
+        
+        Usuario usu1 = new Usuario("48027123", "Bruno");
+        Usuario usu2 = new Usuario("23123242", "Juan");
+
+        sistema.usuarios.agregarFinal(usu1);
+        sistema.usuarios.agregarFinal(usu2);
+
+        sistema.listarUsuarios();
     }
 
     @Override
@@ -25,74 +41,96 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno registrarEstacion(String nombre, String barrio, int capacidad) {
-        if(nombre == null || 
-                nombre.isBlank() || 
-                barrio == null || 
-                barrio.isBlank()){
+        if (nombre == null
+                || nombre.isBlank()
+                || barrio == null
+                || barrio.isBlank()) {
             return Retorno.error1();
         }
-        if(capacidad <= 0){
+        if (capacidad <= 0) {
             return Retorno.error2();
         }
-        
+
         Estacion e = new Estacion(nombre, barrio, capacidad);
-        
-        if(estaciones.obtenerElemento(e) != null){
+
+        if (estaciones.obtenerElemento(e) != null) {
             return Retorno.error3();
-        }    
-        
+        }
+
         estaciones.agregarOrd(e);
         return Retorno.ok();
     }
 
     @Override
     public Retorno registrarUsuario(String cedula, String nombre) {
-        Usuario usuario = new Usuario(cedula, nombre);
-
-        if (cedula.isBlank() || nombre.isBlank()) {
+        if (cedula == null || nombre == null || cedula.isBlank() || nombre.isBlank()) {
             return Retorno.error1();
         }
-        if (cedula.length() < 8) {
+        if (cedula.length() != 8) {
             return Retorno.error2();
         }
+
+        Usuario usuario = new Usuario(cedula, nombre);
+
         if (usuarios.obtenerElemento(usuario) != null) {
             return Retorno.error3();
         }
 
-        usuarios.agregarFinal(usuario);
+        usuarios.agregarOrd(usuario);
         return Retorno.ok();
     }
 
     @Override
     public Retorno registrarBicicleta(String codigo, String tipo) {
-        if(codigo == null ||
-           codigo.isBlank() ||
-           tipo == null ||
-           tipo.isBlank()){
+        if (codigo == null
+                || codigo.isBlank()
+                || tipo == null
+                || tipo.isBlank()) {
             return Retorno.error1();
-        }       
-        if(codigo.length() != 6){
+        }
+        if (codigo.length() != 6) {
             return Retorno.error2();
         }
-        if(!tipo.equals("URBANA") && 
-           !tipo.equals("MOUNTAIN") &&
-           !tipo.equals("ELECTRICA")){
+        if (!tipo.equals("URBANA")
+                && !tipo.equals("MOUNTAIN")
+                && !tipo.equals("ELECTRICA")) {
             return Retorno.error3();
         }
-        
+
         Bicicleta b = new Bicicleta(codigo, tipo);
-        
-        if(bicicletas.obtenerElemento(b) != null){
+
+        if (bicicletas.obtenerElemento(b) != null) {
             return Retorno.error4();
         }
-        
+
         bicicletas.agregarOrd(b);
         return Retorno.ok();
     }
 
     @Override
     public Retorno marcarEnMantenimiento(String codigo, String motivo) {
-        return Retorno.noImplementada();
+        
+        if(codigo == null ||
+           codigo.isBlank() ||
+           motivo == null||
+           motivo.isBlank()){
+            return Retorno.error1();
+        }
+        
+        NodoLista nodo = bicicletas.obtenerElemento(new Bicicleta(codigo));      
+        if(nodo == null)return Retorno.error2();
+        
+        Bicicleta b = (Bicicleta)nodo.getDato();
+        
+        if(b.getEstado().contains("Alquilada"))return Retorno.error3();
+        if(b.getEstado().contains("Mantenimiento")) return Retorno.error4();
+        
+        b.setEstado("Mantenimiento");
+        b.setEnDeposito(true);
+        
+        nodo.setDato(b);
+               
+        return Retorno.ok();
     }
 
     @Override
@@ -127,12 +165,30 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno obtenerUsuario(String cedula) {
-        return Retorno.noImplementada();
+        if (cedula == null || cedula.isBlank()) {
+            System.out.println("error 1");
+            return Retorno.error1();
+        }
+        if (cedula.length() != 8) {
+            System.out.println("error 2");
+            return Retorno.error2();
+        }
+        
+        Usuario usuarioAux = new Usuario(cedula, "aux");
+        NodoLista usuarioBuscado = usuarios.obtenerElemento(usuarioAux);
+
+        if (usuarioBuscado == null) {
+            System.out.println("error 3");
+            return Retorno.error3();
+        }
+
+        System.out.println(usuarioBuscado.getDato());
+        return Retorno.ok(usuarioBuscado.getDato().toString());
     }
 
     @Override
     public Retorno listarUsuarios() {
-        return Retorno.noImplementada();
+        return Retorno.ok(usuarios.devolverListaString());
     }
 
     @Override
@@ -173,5 +229,23 @@ public class Sistema implements IObligatorio {
     @Override
     public Retorno usuarioMayor() {
         return Retorno.noImplementada();
+    }
+    
+    //para Tests
+    public void cambiarEstadoBicicleta(String codigo, String estado){
+        
+        NodoLista nodo = bicicletas.obtenerElemento(new Bicicleta(codigo));            
+        Bicicleta b = (Bicicleta)nodo.getDato();
+        if(b != null){
+            if(estado.contains("Disponible") || estado.contains("Alquilada") || estado.contains("Mantenimiento")){
+            b.setEstado(estado);
+            nodo.setDato(b);
+            }else{
+                System.out.println("El estado no es válido");
+            }
+        }else{
+            System.out.println("No se encontró la bicicleta");
+        }
+        
     }
 }

@@ -9,6 +9,7 @@ public interface ILista<T> {
     public void borrarFin();
     public void vaciar();
     public void mostrar();
+    public String devolverListaString();
     public void agregarOrd(T n);
     public void borrarElemento(T n);
     public int cantElementos();
