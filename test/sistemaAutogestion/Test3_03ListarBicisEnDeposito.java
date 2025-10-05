@@ -26,7 +26,7 @@ public class Test3_03ListarBicisEnDeposito {
         s.registrarBicicleta("ABC123", "MOUNTAIN");
         retorno = s.listarBicisEnDeposito();
         assertEquals(Retorno.Resultado.OK, retorno.getResultado());
-        assertEquals("ABC123#MOUNTAIN", retorno.getValorString());
+        assertEquals("ABC123#MOUNTAIN#Disponible", retorno.getValorString());
     }
 
     @Test
@@ -36,7 +36,7 @@ public class Test3_03ListarBicisEnDeposito {
         s.registrarBicicleta("ABG347", "ELECTRICA");
         retorno = s.listarBicisEnDeposito();
         assertEquals(Retorno.Resultado.OK, retorno.getResultado());
-        assertEquals("ABC123#MOUNTAIN|BCD243#URBANA|ABG347#ELECTRICA", retorno.getValorString());
+        assertEquals("ABC123#MOUNTAIN#Disponible|BCD243#URBANA#Disponible|ABG347#ELECTRICA#Disponible", retorno.getValorString());
     }
 
     @Test
@@ -46,7 +46,7 @@ public class Test3_03ListarBicisEnDeposito {
         s.registrarBicicleta("ABG347", "ELECTRICA");
         retorno = s.listarBicisEnDeposito();
         assertEquals(Retorno.Resultado.OK, retorno.getResultado());
-        assertEquals("ABC123#MOUNTAIN|BCD243#URBANA|ABG347#ELECTRICA", retorno.getValorString());
+        assertEquals("ABC123#MOUNTAIN#Disponible|BCD243#URBANA#Disponible|ABG347#ELECTRICA#Disponible", retorno.getValorString());
     }
 
 }

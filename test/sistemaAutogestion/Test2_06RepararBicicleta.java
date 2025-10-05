@@ -37,7 +37,8 @@ public class Test2_06RepararBicicleta {
 
     @Test
     public void RepararBicicletaError02() {
-        retorno = s.repararBicicleta("123456");
+        s.registrarBicicleta("123456", "MOUNTAIN");
+        retorno = s.repararBicicleta("123453");
         assertEquals(Retorno.Resultado.ERROR_2, retorno.getResultado());
     }
 
