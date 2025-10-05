@@ -1,10 +1,10 @@
 package dominio;
 
 public class Bicicleta implements Comparable {
+
     private String codigo;
     private String tipo;
     private String estado; //Alquilada, Mantenimiento, Disponible
-    private boolean enDeposito;
     private Estacion estacionAsignada;
     private Usuario usuarioAsignado;
     private String motivoDeMantenimiento;
@@ -34,14 +34,6 @@ public class Bicicleta implements Comparable {
         this.estado = estado;
     }
 
-    public boolean isEnDeposito() {
-        return enDeposito;
-    }
-
-    public void setEnDeposito(boolean enDeposito) {
-        this.enDeposito = enDeposito;
-    }
-
     public Estacion getEstacionAsignada() {
         return estacionAsignada;
     }
@@ -65,40 +57,44 @@ public class Bicicleta implements Comparable {
     public void setMotivoDeMantenimiento(String motivoDeMantenimiento) {
         this.motivoDeMantenimiento = motivoDeMantenimiento;
     }
-    
-    
-    public Bicicleta(String codigo){
+
+    public Bicicleta() {
+    }
+
+    public Bicicleta(String codigo) {
         this.codigo = codigo;
         this.tipo = null;
         this.estado = null;
-        this.enDeposito = true;
         this.estacionAsignada = null;
         this.usuarioAsignado = null;
         this.motivoDeMantenimiento = null;
     }
-   
+
     public Bicicleta(String codigo, String tipo) {
         this.codigo = codigo;
         this.tipo = tipo;
         this.estado = "Disponible";
-        this.enDeposito = true;
         this.estacionAsignada = null;
         this.usuarioAsignado = null;
         this.motivoDeMantenimiento = null;
     }
-    
-    public Bicicleta(String codigo, String tipo, String estado){
+
+    public Bicicleta(String codigo, String tipo, String estado) {
         this.codigo = codigo;
         this.tipo = tipo;
         this.estado = estado;
     }
-    
+
+    public boolean isEnDeposito() {
+        return this.getEstacionAsignada() == null;
+    }
+
     @Override
     public int compareTo(Object o) {
-        Bicicleta b2 = (Bicicleta)o;
+        Bicicleta b2 = (Bicicleta) o;
         return this.codigo.compareTo(b2.codigo);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         Bicicleta b2 = (Bicicleta) obj;
@@ -107,8 +103,7 @@ public class Bicicleta implements Comparable {
 
     @Override
     public String toString() {
-        return codigo + "#" + tipo + "#" + estado; 
+        return codigo + "#" + tipo + "#" + estado;
     }
-    
-    
+
 }

@@ -6,7 +6,6 @@ public class Estacion implements Comparable{
     private String barrio;
     private int capacidad;
     private int anclajesOcupados;
-    private ListaNodos<Bicicleta> listaBicis;
     //private ColaNodos<Usuario> listaEsperaAlquiler;
     //private ColaNodos<Usuario> listaEsperaAnclaje;
 
@@ -27,10 +26,6 @@ public class Estacion implements Comparable{
         return anclajesOcupados;
     }
 
-    public ListaNodos<Bicicleta> getListaBicis() {
-        return listaBicis;
-    }
-
     // Setters
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -48,9 +43,6 @@ public class Estacion implements Comparable{
         this.anclajesOcupados = anclajesOcupados;
     }
         
-    public void setListaBicis(ListaNodos<Bicicleta> listaBicis) {
-        this.listaBicis = listaBicis;
-    }
     
 
     public Estacion(String nombre, String barrio, int capacidad) {
@@ -58,7 +50,6 @@ public class Estacion implements Comparable{
         this.barrio = barrio;
         this.capacidad = capacidad;
         this.anclajesOcupados = 0;
-        this.listaBicis = new ListaNodos<Bicicleta>();
     }
 
     // Metodos
