@@ -2,6 +2,18 @@ package dominio;
 
 public class MapaEstaciones {
 
+    public int contarEstacionesPorColumna(String[][] mat, int columna) {
+        int contador = 0;
+
+        for (int i = 0; i < mat.length; i++) {
+            if (!mat[i][columna].equals("o")) {
+                contador++;
+            }
+        }
+
+        return contador;
+    }
+
     public int maxEstacionesFila(String[][] mat) {
         int cantidadEstaciones = 0;
 
@@ -26,12 +38,8 @@ public class MapaEstaciones {
         int cantidadEstaciones = 0;
 
         for (int i = 0; i < mat[0].length; i++) {
-            int contador = 0;
-            for (int j = 0; j < mat.length; j++) {
-                if (!mat[j][i].equals("o")) {
-                    contador++;
-                }
-            }
+            int contador = contarEstacionesPorColumna(mat, i);
+            
             if (contador > cantidadEstaciones) {
                 cantidadEstaciones = contador;
             }
@@ -60,7 +68,29 @@ public class MapaEstaciones {
         }
     }
 
-    public boolean tieneColumnasConsecutivas(String[][] mat) {
-        return false;
+    public String tieneColumnasConsecutivas(String[][] mat) {
+        int cantidadEstacionesAnterior = contarEstacionesPorColumna(mat, 0);
+        int contadorConsecutivas = 1;
+
+        for (int i = 1; i < mat[0].length; i++) {
+            int cantidadEstacionesActual = contarEstacionesPorColumna(mat, i);
+
+            if (cantidadEstacionesActual == cantidadEstacionesAnterior + 1) {
+                cantidadEstacionesAnterior = cantidadEstacionesActual;
+                contadorConsecutivas++;
+            } else {
+                contadorConsecutivas = 1;
+            }
+
+            if (contadorConsecutivas == 3) {
+                return "existe";
+            }
+        }
+
+        return "no existe";
+    }
+    
+    public String devolverInformacionMapa(String [][] mat) {
+        return indicarMaxEstaciones(mat) + "|" + tieneColumnasConsecutivas(mat);
     }
 }
