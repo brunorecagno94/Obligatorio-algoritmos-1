@@ -13,26 +13,28 @@ public class Sistema implements IObligatorio {
     ListaNodos<Usuario> usuarios;
     ListaNodos<Bicicleta> bicicletasEnEstaciones;
     ListaNodos<Bicicleta> bicicletasEnDeposito;
+    MapaEstaciones mapaEstaciones;
 
     public Sistema() {
         this.estaciones = new ListaNodos<Estacion>();
         this.usuarios = new ListaNodos<Usuario>();
         this.bicicletasEnEstaciones = new ListaNodos<Bicicleta>();
         this.bicicletasEnDeposito = new ListaNodos<Bicicleta>();
+        this.mapaEstaciones = new MapaEstaciones();
     }
 
     public static void main(String[] args) {
         Sistema sistema = new Sistema();
+        MapaEstaciones mapa = new MapaEstaciones();
         String[][] matt = {};
-
-        String[][] matriz
+        String[][] mappa
                 = {{"o", "o", "E4", "o", "E3"},
                 {"E3", "E3", "E3", "E3", "E3"},
                 {"o", "E3", "E3", "E3", "E4"},
-                {"o", "o", "E3", "o", "o"},
-                {"E3", "o", "E5", "o", "E3"}
+                {"o", "o", "o", "o", "o"},
+                {"o", "o", "o", "o", "E3"}
                 };
-
+        System.out.println(mapa.devolverInformacionMapa(mappa));
     }
 
     @Override
@@ -226,7 +228,7 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno informaciónMapa(String[][] mapa) {
-        return Retorno.noImplementada();
+        return Retorno.ok(mapaEstaciones.devolverInformacionMapa(mapa));
     }
 
     @Override
