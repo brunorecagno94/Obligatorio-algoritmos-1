@@ -23,20 +23,6 @@ public class Sistema implements IObligatorio {
         this.mapaEstaciones = new MapaEstaciones();
     }
 
-    public static void main(String[] args) {
-        Sistema sistema = new Sistema();
-        MapaEstaciones mapa = new MapaEstaciones();
-        String[][] matt = {};
-        String[][] mappa
-                = {{"o", "o", "E4", "o", "E3"},
-                {"E3", "E3", "E3", "E3", "E3"},
-                {"o", "E3", "E3", "E3", "E4"},
-                {"o", "o", "o", "o", "o"},
-                {"o", "o", "o", "o", "E3"}
-                };
-        System.out.println(mapa.devolverInformacionMapa(mappa));
-    }
-
     @Override
     public Retorno crearSistemaDeGestion() {
         Sistema sistema = new Sistema();
