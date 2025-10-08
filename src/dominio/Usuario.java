@@ -48,7 +48,7 @@ public class Usuario implements Comparable {
     @Override
     public int compareTo(Object o) {
         Usuario other = (Usuario)o;
-       return this.cedula.compareTo(other.cedula);
+       return this.nombre.compareTo(other.nombre);
     }
 
     @Override

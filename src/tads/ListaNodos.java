@@ -85,24 +85,23 @@ public class ListaNodos<T extends Comparable> implements ILista<T> {
 
     @Override
     public String devolverListaString() {
-        String listaResult = "";
+        if (this.esVacia()) {
+            return "";
+        } else {
 
-        if (!this.esVacia()) {
+            String listaResult = "";
             NodoLista aux = this.lista;
 
-            while (aux.getSiguiente() != null) {
-                listaResult += aux.getDato() + "|";
-                aux = aux.getSiguiente();
-            }
-
-            if (aux.getSiguiente() == null) {
+            while (aux != null) {
                 listaResult += aux.getDato();
+                if (aux.getSiguiente() != null) {
+                    listaResult += "|";
+                }
+                aux = aux.getSiguiente();
             }
 
             return listaResult;
         }
-
-        return listaResult;
     }
 
     @Override
@@ -111,7 +110,7 @@ public class ListaNodos<T extends Comparable> implements ILista<T> {
             agregarInicio(n);
         } else {
             NodoLista aux = this.lista;
-            while (aux.getSiguiente() != null && aux.getSiguiente().getDato().compareTo(n) > 0) {
+            while (aux.getSiguiente() != null && aux.getSiguiente().getDato().compareTo(n) < 0) {
                 aux = aux.getSiguiente();
             }
 

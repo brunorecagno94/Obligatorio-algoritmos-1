@@ -6,7 +6,7 @@ public class MapaEstaciones {
         int contador = 0;
 
         for (int i = 0; i < mat.length; i++) {
-            if (!mat[i][columna].equals("o")) {
+            if (!mat[i][columna].equals("o") && !mat[i][columna].equals("")) {
                 contador++;
             }
         }
@@ -21,7 +21,7 @@ public class MapaEstaciones {
             int contador = 0;
 
             for (int j = 0; j < mat[i].length; j++) {
-                if (!mat[i][j].equals("o")) {
+                if (!mat[i][j].equals("o") && !mat[i][j].equals("")) {
                     contador++;
                 }
             }
