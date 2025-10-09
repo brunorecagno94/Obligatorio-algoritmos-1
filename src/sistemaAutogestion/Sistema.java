@@ -23,14 +23,6 @@ public class Sistema implements IObligatorio {
         this.mapaEstaciones = new MapaEstaciones();
     }
 
-    public static void main(String[] args) {
-        Sistema s = new Sistema();
-        s.registrarUsuario("22223333", "Carlos");
-        s.registrarUsuario("33334444", "Ana");
-        s.registrarUsuario("44445555", "Beatriz");
-        
-        System.out.println(s.listarUsuarios());
-    }
     @Override
     public Retorno crearSistemaDeGestion() {
         Sistema sistema = new Sistema();
@@ -131,9 +123,12 @@ public class Sistema implements IObligatorio {
 
         b.setEstado("Mantenimiento");
         b.setEstacionAsignada(null);
-        bicicletasEnEstaciones.borrarElemento(b);
-        bicicletasEnDeposito.agregarOrd(b);
 
+        if (!b.isEnDeposito()) {
+            bicicletasEnEstaciones.borrarElemento(b);
+            bicicletasEnDeposito.agregarOrd(b);
+        }
+        
         return Retorno.ok();
     }
 

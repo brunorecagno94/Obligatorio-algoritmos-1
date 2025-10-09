@@ -88,12 +88,12 @@ public class ListaNodos<T extends Comparable> implements ILista<T> {
         if (this.esVacia()) {
             return "";
         } else {
-
             String listaResult = "";
             NodoLista aux = this.lista;
 
             while (aux != null) {
                 listaResult += aux.getDato();
+
                 if (aux.getSiguiente() != null) {
                     listaResult += "|";
                 }
