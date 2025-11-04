@@ -1,4 +1,5 @@
 package dominio;
+import tads.ColaNodos;
 import tads.ListaNodos;
 
 public class Estacion implements Comparable{
@@ -6,8 +7,8 @@ public class Estacion implements Comparable{
     private String barrio;
     private int capacidad;
     private int anclajesOcupados;
-    //private ColaNodos<Usuario> listaEsperaAlquiler;
-    //private ColaNodos<Usuario> listaEsperaAnclaje;
+    private ColaNodos<Usuario> colaEsperaAlquiler;
+    private ColaNodos<Usuario> colaEsperaAnclaje;
 
     // Getters
     public String getNombre() {
@@ -26,6 +27,16 @@ public class Estacion implements Comparable{
         return anclajesOcupados;
     }
 
+    public ColaNodos<Usuario> getColaEsperaAlquiler() {
+        return colaEsperaAlquiler;
+    }
+
+    public ColaNodos<Usuario> getColaEsperaAnclaje() {
+        return colaEsperaAnclaje;
+    }
+    
+    
+
     // Setters
     public void setNombre(String nombre) {
         this.nombre = nombre;
@@ -42,6 +53,16 @@ public class Estacion implements Comparable{
     public void setAnclajesOcupados(int anclajesOcupados) {
         this.anclajesOcupados = anclajesOcupados;
     }
+
+    public void setColaEsperaAlquiler(ColaNodos<Usuario> colaEsperaAlquiler) {
+        this.colaEsperaAlquiler = colaEsperaAlquiler;
+    }
+
+    public void setColaEsperaAnclaje(ColaNodos<Usuario> colaEsperaAnclaje) {
+        this.colaEsperaAnclaje = colaEsperaAnclaje;
+    }
+    
+    
         
     
 
