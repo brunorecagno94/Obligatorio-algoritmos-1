@@ -32,21 +32,21 @@ public class Test3_03ListarBicisEnDeposito {
     @Test
     public void listarBicisEnDepositoIngresoOrdenado() {
         s.registrarBicicleta("ABC123", "MOUNTAIN");
-        s.registrarBicicleta("BCD243", "URBANA");
         s.registrarBicicleta("ABG347", "ELECTRICA");
+        s.registrarBicicleta("BCD243", "URBANA");
         retorno = s.listarBicisEnDeposito();
         assertEquals(Retorno.Resultado.OK, retorno.getResultado());
-        assertEquals("ABC123#MOUNTAIN#Disponible|BCD243#URBANA#Disponible|ABG347#ELECTRICA#Disponible", retorno.getValorString());
+        assertEquals("ABC123#MOUNTAIN#Disponible|ABG347#ELECTRICA#Disponible|BCD243#URBANA#Disponible", retorno.getValorString());
     }
 
     @Test
     public void listarBicisEnDepositoIngresoDesordenado() {
-        s.registrarBicicleta("ABC123", "MOUNTAIN");
-        s.registrarBicicleta("BCD243", "URBANA");
         s.registrarBicicleta("ABG347", "ELECTRICA");
+        s.registrarBicicleta("BCD243", "URBANA");
+        s.registrarBicicleta("ABC123", "MOUNTAIN");
         retorno = s.listarBicisEnDeposito();
         assertEquals(Retorno.Resultado.OK, retorno.getResultado());
-        assertEquals("ABC123#MOUNTAIN#Disponible|BCD243#URBANA#Disponible|ABG347#ELECTRICA#Disponible", retorno.getValorString());
+        assertEquals("ABC123#MOUNTAIN#Disponible|ABG347#ELECTRICA#Disponible|BCD243#URBANA#Disponible", retorno.getValorString());
     }
 
 }

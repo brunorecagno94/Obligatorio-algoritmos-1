@@ -26,20 +26,6 @@ public class Sistema implements IObligatorio {
         this.mapaEstaciones = new MapaEstaciones();
     }
 
-    public static void main(String[] args) {
-        Sistema sistema = new Sistema();
-        MapaEstaciones mapa = new MapaEstaciones();
-        String[][] matt = {};
-        String[][] mappa
-                = {{"o", "o", "E4", "o", "E3"},
-                {"E3", "E3", "E3", "E3", "E3"},
-                {"o", "E3", "E3", "E3", "E4"},
-                {"o", "o", "o", "o", "o"},
-                {"o", "o", "o", "o", "E3"}
-                };
-        System.out.println(mapa.devolverInformacionMapa(mappa));
-    }
-
     @Override
     public Retorno crearSistemaDeGestion() {
         Sistema sistema = new Sistema();
@@ -73,7 +59,7 @@ public class Sistema implements IObligatorio {
         if (cedula == null || nombre == null || cedula.isBlank() || nombre.isBlank()) {
             return Retorno.error1();
         }
-        if (cedula.length() != 8) {
+        if (cedula.length() != 8 || !cedula.matches("\\d+")) {
             return Retorno.error2();
         }
 
@@ -140,9 +126,12 @@ public class Sistema implements IObligatorio {
 
         b.setEstado("Mantenimiento");
         b.setEstacionAsignada(null);
-        bicicletasEnEstaciones.borrarElemento(b);
-        bicicletasEnDeposito.agregarOrd(b);
 
+        if (!b.isEnDeposito()) {
+            bicicletasEnEstaciones.borrarElemento(b);
+            bicicletasEnDeposito.agregarOrd(b);
+        }
+        
         return Retorno.ok();
     }
 

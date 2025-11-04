@@ -49,4 +49,13 @@ public class Test3_02ListarUsuarios {
         assertEquals("Usuario01#11111111|Usuario02#31221111|Usuario03#11331111", retorno.getValorString());
     }
 
+    public void listarUsuarios_Ok_OrdenPorNombre() {
+        s.registrarUsuario("22223333", "Carlos");
+        s.registrarUsuario("33334444", "Ana");
+        s.registrarUsuario("44445555", "Beatriz");
+        retorno = s.listarUsuarios();
+        assertEquals(Retorno.Resultado.OK, retorno.getResultado());
+        // Orden esperado: Ana, Beatriz, Carlos
+        assertEquals("Ana#33334444|Beatriz#44445555|Carlos#22223333", retorno.getValorString());
+    }
 }
