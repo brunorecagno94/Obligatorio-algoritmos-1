@@ -5,6 +5,7 @@ import tads.NodoLista;
 import dominio.*;
 import java.util.HashSet;
 import java.util.Set;
+import tads.PilaNodos;
 
 //Bruno Recagno-333245, Victoria Calvo-339977
 public class Sistema implements IObligatorio {
@@ -13,6 +14,7 @@ public class Sistema implements IObligatorio {
     ListaNodos<Usuario> usuarios;
     ListaNodos<Bicicleta> bicicletasEnEstaciones;
     ListaNodos<Bicicleta> bicicletasEnDeposito;
+    PilaNodos<Alquiler> alquileresAsignados;
     MapaEstaciones mapaEstaciones;
 
     public Sistema() {
@@ -20,6 +22,7 @@ public class Sistema implements IObligatorio {
         this.usuarios = new ListaNodos<Usuario>();
         this.bicicletasEnEstaciones = new ListaNodos<Bicicleta>();
         this.bicicletasEnDeposito = new ListaNodos<Bicicleta>();
+        this.alquileresAsignados = new PilaNodos<Alquiler>();
         this.mapaEstaciones = new MapaEstaciones();
     }
 
