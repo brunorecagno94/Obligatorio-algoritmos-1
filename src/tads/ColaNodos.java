@@ -43,7 +43,7 @@ public class ColaNodos<T> implements ICola<T> {
     @Override
     public void encolar(T dato) {
         NodoCola<T> nuevo = new NodoCola<>(dato);
-        if (esVacia()) {
+        if (esLlena()) {
             System.out.println("La cola está llena, no puede agregar elemento");
         } else {
             if (esVacia()) {
