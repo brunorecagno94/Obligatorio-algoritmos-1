@@ -62,9 +62,9 @@ public class Estacion implements Comparable{
         this.colaEsperaAnclaje = colaEsperaAnclaje;
     }
     
-    
-        
-    
+    public Estacion(String nombre) {
+        this.nombre = nombre;
+    }
 
     public Estacion(String nombre, String barrio, int capacidad) {
         this.nombre = nombre;

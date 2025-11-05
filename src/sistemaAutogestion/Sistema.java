@@ -26,6 +26,22 @@ public class Sistema implements IObligatorio {
         this.mapaEstaciones = new MapaEstaciones();
     }
 
+    public static void main(String[] args) {
+        Sistema s = new Sistema();
+        Estacion e1 = new Estacion("Estacion1");
+        Estacion e2 = new Estacion("Estacion2");
+        Estacion e3 = new Estacion("Estacion3");
+
+        s.estaciones.agregarOrd(e1);
+        s.estaciones.agregarOrd(e2);
+        s.estaciones.agregarOrd(e3);
+
+        s.estaciones.mostrar();
+        s.eliminarEstacion("Estacion2");
+        System.out.println("--------------------");
+        s.estaciones.mostrar();
+    }
+
     @Override
     public Retorno crearSistemaDeGestion() {
         Sistema sistema = new Sistema();
@@ -131,7 +147,7 @@ public class Sistema implements IObligatorio {
             bicicletasEnEstaciones.borrarElemento(b);
             bicicletasEnDeposito.agregarOrd(b);
         }
-        
+
         return Retorno.ok();
     }
 
@@ -160,9 +176,29 @@ public class Sistema implements IObligatorio {
         return Retorno.ok();
     }
 
+    // =====================================================
+    //  TESTEAR CUANDO TERMINEMOS CON COLAS DE ESPERA:
+    // =====================================================
     @Override
     public Retorno eliminarEstacion(String nombre) {
-        return Retorno.noImplementada();
+        if (nombre == null || nombre.isBlank()) {
+            return Retorno.error1();
+        }
+        NodoLista nodo = encontrarEstacion(nombre);
+        if (nodo == null) {
+            return Retorno.error2();
+        }
+
+        Estacion estacion = (Estacion) nodo.getDato();
+
+        if (estacion.getAnclajesOcupados() > 0
+                || estacion.getColaEsperaAnclaje() != null
+                || estacion.getColaEsperaAlquiler() != null) {
+            return Retorno.error3();
+        }
+
+        estaciones.borrarElemento(estacion);
+        return Retorno.ok();
     }
 
     @Override
@@ -260,6 +296,16 @@ public class Sistema implements IObligatorio {
 
         if (nodo == null) {
             nodo = bicicletasEnDeposito.obtenerElemento(new Bicicleta(codigo));
+        }
+
+        return nodo;
+    }
+
+    public NodoLista<Estacion> encontrarEstacion(String nombre) {
+        NodoLista nodo = estaciones.obtenerElemento(new Estacion(nombre));
+
+        if (nodo == null) {
+            System.out.println("No se encontró la estación");
         }
 
         return nodo;
