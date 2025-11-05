@@ -28,18 +28,15 @@ public class Sistema implements IObligatorio {
 
     public static void main(String[] args) {
         Sistema s = new Sistema();
-        Estacion e1 = new Estacion("Estacion1");
-        Estacion e2 = new Estacion("Estacion2");
-        Estacion e3 = new Estacion("Estacion3");
+        Estacion e1 = new Estacion("Estacion1", "Cordon", 35);
+        Estacion e2 = new Estacion("Estacion2", "Centro", 12);
+        Estacion e3 = new Estacion("Estacion3", "Carrasco", 48);
 
         s.estaciones.agregarOrd(e1);
         s.estaciones.agregarOrd(e2);
         s.estaciones.agregarOrd(e3);
 
-        s.estaciones.mostrar();
-        s.eliminarEstacion("Estacion2");
-        System.out.println("--------------------");
-        s.estaciones.mostrar();
+        s.estacionesConDisponibilidad(20);
     }
 
     @Override
@@ -266,6 +263,10 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno estacionesConDisponibilidad(int n) {
+        if (n <= 1) {
+            System.out.println("Ingrese una cantidad mayor a 1");
+            return Retorno.error1();
+        } 
         return Retorno.noImplementada();
     }
 

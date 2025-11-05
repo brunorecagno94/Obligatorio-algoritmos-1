@@ -93,4 +93,8 @@ public class Estacion implements Comparable{
         Estacion e2 = (Estacion) obj;
         return this.nombre.equals(e2.nombre);
     }
+    
+    public int mostrarDisponibilidad() {
+        return this.capacidad - this.anclajesOcupados;
+    }
 }
