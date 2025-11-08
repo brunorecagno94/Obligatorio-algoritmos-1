@@ -2,7 +2,7 @@ package tads;
 
 public class ListaNodos<T extends Comparable> implements ILista<T> {
 
-    private NodoLista lista;
+    private NodoLista<T> lista;
     private int cantidad;
 
     public ListaNodos() {
@@ -149,18 +149,19 @@ public class ListaNodos<T extends Comparable> implements ILista<T> {
         return cantidad;
     }
 
+    // CAMBIAR POR NODOLISTA T
     @Override
-    public NodoLista obtenerElemento(T n) {
-        NodoLista ret = this.lista;
+    public T obtenerElemento(T n) {
+        NodoLista<T>  ret = this.lista;
 
         while (ret != null) {
             if (ret.getDato().equals(n)) {
-                return ret;
+                return ret.getDato();
             }
             ret = ret.getSiguiente();
         }
 
-        return ret;
+        return null;
     }
 
     @Override

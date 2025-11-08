@@ -13,7 +13,7 @@ public interface ILista<T> {
     public void agregarOrd(T n);
     public void borrarElemento(T n);
     public int cantElementos();
-    public NodoLista obtenerElemento(T n);
+    public T obtenerElemento(T n);
     public void mostrarREC(NodoLista l);
     
 }

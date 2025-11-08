@@ -25,7 +25,4 @@ public class NodoLista<T extends Comparable> {
     public void setSiguiente(NodoLista siguiente) {
         this.siguiente = siguiente;
     }
-    
-    
-    
 }
