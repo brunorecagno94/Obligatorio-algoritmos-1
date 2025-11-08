@@ -1,7 +1,11 @@
 package sistemaAutogestion;
 
+import tads.ILista;
+import tads.IPila;
+import tads.ICola;
 import tads.ListaNodos;
-import tads.NodoLista;
+import tads.PilaNodos;
+import tads.ColaNodos;
 import dominio.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -10,11 +14,11 @@ import tads.PilaNodos;
 //Bruno Recagno-333245, Victoria Calvo-339977
 public class Sistema implements IObligatorio {
 
-    ListaNodos<Estacion> estaciones;
-    ListaNodos<Usuario> usuarios;
-    ListaNodos<Bicicleta> bicicletasEnEstaciones;
-    ListaNodos<Bicicleta> bicicletasEnDeposito;
-    PilaNodos<Alquiler> alquileresAsignados;
+    ILista<Estacion> estaciones;
+    ILista<Usuario> usuarios;
+    ILista<Bicicleta> bicicletasEnEstaciones;
+    ILista<Bicicleta> bicicletasEnDeposito;
+    IPila<Alquiler> alquileresAsignados;
     MapaEstaciones mapaEstaciones;
 
     public Sistema() {
