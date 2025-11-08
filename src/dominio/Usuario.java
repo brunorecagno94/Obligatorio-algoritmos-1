@@ -33,6 +33,11 @@ public class Usuario implements Comparable {
 //    public void setAlquileres(ListaNodos alquileres) {
 //        this.alquileres = alquileres;
 //    }
+    
+    public Usuario(String cedula) {
+        this.cedula = cedula;
+    }
+    
     public Usuario(String cedula, String nombre) {
         this.cedula = cedula;
         this.nombre = nombre;

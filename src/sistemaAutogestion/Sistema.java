@@ -76,6 +76,7 @@ public class Sistema implements IObligatorio {
         if (cedula == null || nombre == null || cedula.isBlank() || nombre.isBlank()) {
             return Retorno.error1();
         }
+        
         if (cedula.length() != 8 || !cedula.matches("\\d+")) {
             return Retorno.error2();
         }
@@ -107,13 +108,13 @@ public class Sistema implements IObligatorio {
             return Retorno.error3();
         }
 
-        Bicicleta b = new Bicicleta(codigo, tipo);
+        Bicicleta bicicleta = new Bicicleta(codigo, tipo);
 
-        if (bicicletasEnEstaciones.obtenerElemento(b) != null || bicicletasEnDeposito.obtenerElemento(b) != null) {
+        if (bicicletasEnEstaciones.obtenerElemento(bicicleta) != null || bicicletasEnDeposito.obtenerElemento(bicicleta) != null) {
             return Retorno.error4();
         }
 
-        bicicletasEnDeposito.agregarOrd(b);
+        bicicletasEnDeposito.agregarOrd(bicicleta);
         return Retorno.ok();
     }
 
@@ -162,7 +163,6 @@ public class Sistema implements IObligatorio {
             return Retorno.error2();
         }
 
-
         if (!bicicleta.getEstado().contains("Mantenimiento")) {
             return Retorno.error3();
         }
@@ -183,8 +183,7 @@ public class Sistema implements IObligatorio {
             return Retorno.error1();
         }
         
-        Estacion estacionAux = new Estacion(nombre);
-        Estacion estacion = (Estacion)estaciones.obtenerElemento(estacionAux);
+        Estacion estacion = (Estacion)estaciones.obtenerElemento(new Estacion(nombre));
         if (estacion == null) {
             return Retorno.error2();
         }
@@ -222,19 +221,15 @@ public class Sistema implements IObligatorio {
     @Override
     public Retorno obtenerUsuario(String cedula) {
         if (cedula == null || cedula.isBlank()) {
-            System.out.println("error 1");
             return Retorno.error1();
         }
         if (cedula.length() != 8) {
-            System.out.println("error 2");
             return Retorno.error2();
         }
 
-        Usuario usuarioAux = new Usuario(cedula, "aux");
-        Usuario usuarioBuscado = usuarios.obtenerElemento(usuarioAux);
+        Usuario usuarioBuscado = usuarios.obtenerElemento(new Usuario(cedula));
 
         if (usuarioBuscado == null) {
-            System.out.println("error 3");
             return Retorno.error3();
         }
 
@@ -290,8 +285,11 @@ public class Sistema implements IObligatorio {
     public Retorno usuarioMayor() {
         return Retorno.noImplementada();
     }
-
+    
+    // =================================================
     // Métodos custom 
+    // =================================================
+    
     public Bicicleta encontrarBicicleta(String codigo) {
 
         Bicicleta bicicleta = bicicletasEnEstaciones.obtenerElemento(new Bicicleta(codigo));
