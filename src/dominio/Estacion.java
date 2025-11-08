@@ -1,8 +1,10 @@
 package dominio;
+
 import tads.ColaNodos;
 import tads.ListaNodos;
 
-public class Estacion implements Comparable{
+public class Estacion implements Comparable {
+
     private String nombre;
     private String barrio;
     private int capacidad;
@@ -34,8 +36,6 @@ public class Estacion implements Comparable{
     public ColaNodos<Usuario> getColaEsperaAnclaje() {
         return colaEsperaAnclaje;
     }
-    
-    
 
     // Setters
     public void setNombre(String nombre) {
@@ -61,6 +61,9 @@ public class Estacion implements Comparable{
     public void setColaEsperaAnclaje(ColaNodos<Usuario> colaEsperaAnclaje) {
         this.colaEsperaAnclaje = colaEsperaAnclaje;
     }
+
+    public Estacion() {
+    };
     
     public Estacion(String nombre) {
         this.nombre = nombre;
@@ -76,24 +79,24 @@ public class Estacion implements Comparable{
     // Metodos
     @Override
     public String toString() {
-        return "Estacion:" + nombre + 
-               ", barrio: " + barrio + 
-               ", capacidad: " + capacidad + 
-               ", anclajes ocupados: " + anclajesOcupados;
+        return "Estacion:" + nombre
+                + ", barrio: " + barrio
+                + ", capacidad: " + capacidad
+                + ", anclajes ocupados: " + anclajesOcupados;
     }
 
     @Override
     public int compareTo(Object o) {
-        Estacion e2 = (Estacion)o;
+        Estacion e2 = (Estacion) o;
         return this.nombre.compareTo(e2.nombre);
     }
-    
+
     @Override
     public boolean equals(Object obj) {
         Estacion e2 = (Estacion) obj;
         return this.nombre.equals(e2.nombre);
     }
-    
+
     public int mostrarDisponibilidad() {
         return this.capacidad - this.anclajesOcupados;
     }
