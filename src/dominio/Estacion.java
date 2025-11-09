@@ -76,6 +76,14 @@ public class Estacion implements Comparable {
         this.anclajesOcupados = 0;
     }
 
+    // Constructor para test
+        public Estacion(String nombre, String barrio, int capacidad, int anclajesOcupados) {
+        this.nombre = nombre;
+        this.barrio = barrio;
+        this.capacidad = capacidad;
+        this.anclajesOcupados = anclajesOcupados;
+    }
+        
     // Metodos
     @Override
     public String toString() {
@@ -95,9 +103,5 @@ public class Estacion implements Comparable {
     public boolean equals(Object obj) {
         Estacion e2 = (Estacion) obj;
         return this.nombre.equals(e2.nombre);
-    }
-
-    public int mostrarDisponibilidad() {
-        return this.capacidad - this.anclajesOcupados;
     }
 }

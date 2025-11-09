@@ -149,10 +149,9 @@ public class ListaNodos<T extends Comparable> implements ILista<T> {
         return cantidad;
     }
 
-    // CAMBIAR POR NODOLISTA T
     @Override
     public T obtenerElemento(T n) {
-        NodoLista<T>  ret = this.lista;
+        NodoLista<T> ret = this.lista;
 
         while (ret != null) {
             if (ret.getDato().equals(n)) {
@@ -162,6 +161,27 @@ public class ListaNodos<T extends Comparable> implements ILista<T> {
         }
 
         return null;
+    }
+
+    @Override
+    public T obtenerElementoEnPosicion(int pos) {
+        if (pos < 0 || pos >= this.cantidad) {
+            System.out.println("Ingrese un número mayor que 0 y menor que" + this.cantidad);
+        }
+
+        NodoLista<T> aux = this.lista;
+        int i = 0;
+
+        while (i < pos && aux != null) {
+            aux = aux.getSiguiente();
+            i++;
+        }
+
+        if (aux != null) {
+            return aux.getDato();
+        } else {
+            return null;
+        }
     }
 
     @Override
