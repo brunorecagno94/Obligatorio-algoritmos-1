@@ -14,6 +14,7 @@ public interface ILista<T> {
     public void borrarElemento(T n);
     public int cantElementos();
     public T obtenerElemento(T n);
+    public T obtenerElementoEnPosicion(int pos);
     public void mostrarREC(NodoLista l);
     
 }
