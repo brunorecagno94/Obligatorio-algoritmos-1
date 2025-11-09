@@ -1,10 +1,8 @@
 package sistemaAutogestion;
 
-import dominio.Bicicleta;
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
-import tads.NodoLista;
 
 public class Test2_05PonerBicicletaEnMantenimiento {
 

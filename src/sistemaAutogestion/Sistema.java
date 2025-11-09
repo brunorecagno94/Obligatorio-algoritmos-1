@@ -32,15 +32,19 @@ public class Sistema implements IObligatorio {
 
     public static void main(String[] args) {
         Sistema s = new Sistema();
-        Estacion e1 = new Estacion("Estacion1", "Cordon", 35, 12);
-        Estacion e2 = new Estacion("Estacion2", "Centro", 12, 4);
-        Estacion e3 = new Estacion("Estacion3", "Carrasco", 48, 10);
-
-        s.estaciones.agregarOrd(e1);
-        s.estaciones.agregarOrd(e2);
-        s.estaciones.agregarOrd(e3);
-
-        s.estacionesConDisponibilidad(2);
+//        Estacion e1 = new Estacion("Estacion1", "Cordon", 35, 12);
+//        Estacion e2 = new Estacion("Estacion2", "Centro", 12, 4);
+//        Estacion e3 = new Estacion("Estacion3", "Carrasco", 48, 10);
+//
+//        s.estaciones.agregarOrd(e1);
+//        s.estaciones.agregarOrd(e2);
+//        s.estaciones.agregarOrd(e3);
+        ((Sistema)s).registrarEstacionConAnclajes("Estacion 1", "Ciudad Vieja", 20, 15);
+        ((Sistema)s).registrarEstacionConAnclajes("Estacion 2", "Palermo", 10, 0);
+        ((Sistema)s).registrarEstacionConAnclajes("Estacion 3", "Aguada", 30, 22);
+        ((Sistema)s).registrarEstacionConAnclajes("Estacion 4", "Capurro", 25, 12);
+        ((Sistema)s).registrarEstacionConAnclajes("Estacion 5", "Cordon", 15, 15);
+        ((Sistema)s).estacionesConDisponibilidad(14);
     }
 
     @Override
@@ -76,7 +80,7 @@ public class Sistema implements IObligatorio {
         if (cedula == null || nombre == null || cedula.isBlank() || nombre.isBlank()) {
             return Retorno.error1();
         }
-        
+
         if (cedula.length() != 8 || !cedula.matches("\\d+")) {
             return Retorno.error2();
         }
@@ -182,8 +186,8 @@ public class Sistema implements IObligatorio {
         if (nombre == null || nombre.isBlank()) {
             return Retorno.error1();
         }
-        
-        Estacion estacion = (Estacion)estaciones.obtenerElemento(new Estacion(nombre));
+
+        Estacion estacion = (Estacion) estaciones.obtenerElemento(new Estacion(nombre));
         if (estacion == null) {
             return Retorno.error2();
         }
@@ -262,20 +266,21 @@ public class Sistema implements IObligatorio {
         if (n <= 1) {
             System.out.println("Ingrese una cantidad mayor a 1");
             return Retorno.error1();
-        } 
-        
+        }
+
         int cantidadEstaciones = 0;
-        
+
         for (int i = 0; i < estaciones.cantElementos(); i++) {
-            Estacion estacion = estaciones.obtenerElementoEnPosicion(0);
-            
-            if(estacion.getAnclajesOcupados() > n) {
+            Estacion estacion = estaciones.obtenerElementoEnPosicion(i);
+
+            if (estacion.getAnclajesOcupados() > n) {
+                System.out.println("+1 estacion");
                 cantidadEstaciones++;
             }
         }
-        
+
         System.out.println(cantidadEstaciones);
-        return Retorno.ok(cantidadEstaciones);
+        return Retorno.ok(cantidadEstaciones + "");
     }
 
     @Override
@@ -297,11 +302,10 @@ public class Sistema implements IObligatorio {
     public Retorno usuarioMayor() {
         return Retorno.noImplementada();
     }
-    
+
     // =================================================
     // Métodos custom 
     // =================================================
-    
     public Bicicleta encontrarBicicleta(String codigo) {
 
         Bicicleta bicicleta = bicicletasEnEstaciones.obtenerElemento(new Bicicleta(codigo));
@@ -343,5 +347,31 @@ public class Sistema implements IObligatorio {
                 System.out.println("El estado no es válido");
             }
         }
+    }
+
+    public void registrarEstacionConAnclajes(String nombre, String barrio, int capacidad, int anclajesOcupados) {
+        if (nombre == null
+                || nombre.isBlank()
+                || barrio == null
+                || barrio.isBlank()) {
+            System.out.println("Ingrese un nombre valido");
+        }
+        if (capacidad <= 0) {
+            System.out.println("La capacidad debe ser mayor que 0");
+        }
+        if (anclajesOcupados < 0) {
+            System.out.println("Los anclajes ocupados no pueden ser menos que 0");
+        }
+        if (anclajesOcupados > capacidad) {
+            System.out.println("La capacidad de la estación no puede ser menor a los anclajes ocupados");
+        }
+
+        Estacion e = new Estacion(nombre, barrio, capacidad, anclajesOcupados);
+
+        if (estaciones.obtenerElemento(e) != null) {
+            System.out.println("La estacion ya existe");
+        }
+
+        estaciones.agregarOrd(e);
     }
 }

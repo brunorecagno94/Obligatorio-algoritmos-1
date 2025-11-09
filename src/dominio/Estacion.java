@@ -87,10 +87,10 @@ public class Estacion implements Comparable {
     // Metodos
     @Override
     public String toString() {
-        return "Estacion:" + nombre
-                + ", barrio: " + barrio
-                + ", capacidad: " + capacidad
-                + ", anclajes ocupados: " + anclajesOcupados;
+        return "Estacion:" + this.nombre
+                + ", barrio: " + this.barrio
+                + ", capacidad: " + this.capacidad
+                + ", anclajes ocupados: " + this.anclajesOcupados;
     }
 
     @Override
