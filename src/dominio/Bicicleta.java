@@ -64,7 +64,7 @@ public class Bicicleta implements Comparable {
     public Bicicleta(String codigo) {
         this.codigo = codigo;
         this.tipo = null;
-        this.estado = null;
+        this.estado = "Disponible";
         this.estacionAsignada = null;
         this.usuarioAsignado = null;
         this.motivoDeMantenimiento = null;

@@ -32,19 +32,32 @@ public class Sistema implements IObligatorio {
 
     public static void main(String[] args) {
         Sistema s = new Sistema();
-//        Estacion e1 = new Estacion("Estacion1", "Cordon", 35, 12);
-//        Estacion e2 = new Estacion("Estacion2", "Centro", 12, 4);
-//        Estacion e3 = new Estacion("Estacion3", "Carrasco", 48, 10);
-//
-//        s.estaciones.agregarOrd(e1);
-//        s.estaciones.agregarOrd(e2);
-//        s.estaciones.agregarOrd(e3);
-        ((Sistema)s).registrarEstacionConAnclajes("Estacion 1", "Ciudad Vieja", 20, 15);
-        ((Sistema)s).registrarEstacionConAnclajes("Estacion 2", "Palermo", 10, 0);
-        ((Sistema)s).registrarEstacionConAnclajes("Estacion 3", "Aguada", 30, 22);
-        ((Sistema)s).registrarEstacionConAnclajes("Estacion 4", "Capurro", 25, 12);
-        ((Sistema)s).registrarEstacionConAnclajes("Estacion 5", "Cordon", 15, 15);
-        ((Sistema)s).estacionesConDisponibilidad(14);
+        Bicicleta b1 = new Bicicleta("123456", "MOUNTAIN");
+        Bicicleta b2 = new Bicicleta("789123", "URBANA");
+
+        Estacion e1 = new Estacion("Estacion1", "Cordon", 35, 12);
+        Estacion e2 = new Estacion("Estacion2", "Centro", 12, 4);
+        Estacion e3 = new Estacion("Estacion3", "Carrasco", 48, 10);
+
+        s.registrarBicicleta("123456", "MOUNTAIN");
+        s.registrarBicicleta("789123", "URBANA");
+        s.registrarEstacionConAnclajes("Estacion1", "Cordon", 35, 12);
+        s.registrarEstacionConAnclajes("Estacion2", "Centro", 12, 4);
+        s.registrarEstacionConAnclajes("Estacion3", "Carrasco", 48, 10);
+
+        System.out.println("Deposito:");
+        s.bicicletasEnDeposito.mostrar();
+        System.out.println("Estacion:");
+        s.bicicletasEnEstaciones.mostrar();
+
+        System.out.println("------------------");
+
+        s.asignarBicicletaAEstacion("123456", "Estacion1");
+        s.asignarBicicletaAEstacion("123456", "Estacion1");
+        System.out.println("Deposito:");
+        s.bicicletasEnDeposito.mostrar();
+        System.out.println("Estacion:");
+        s.bicicletasEnEstaciones.mostrar();
     }
 
     @Override
@@ -204,7 +217,53 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno asignarBicicletaAEstacion(String codigo, String nombreEstacion) {
-        return Retorno.noImplementada();
+        if (codigo == null
+                || codigo.isBlank()
+                || nombreEstacion == null
+                || nombreEstacion.isBlank()) {
+            System.out.println("ingresa bien los datos master");
+            return Retorno.error1();
+        }
+
+        // Busca la bicicleta en depósito
+        Bicicleta bicicleta = bicicletasEnDeposito.obtenerElemento(new Bicicleta(codigo));
+        
+        // Si no está en depósito, la busca en estaciones
+        if(bicicleta == null) {
+            bicicleta = bicicletasEnEstaciones.obtenerElemento(new Bicicleta(codigo));
+        }
+        
+        Estacion estacion = estaciones.obtenerElemento(new Estacion(nombreEstacion));
+
+        if (bicicleta == null) {
+            System.out.println("no existe");
+            return Retorno.error2();
+        } else if (!bicicleta.getEstado().equals("Disponible")) {
+            System.out.println("no esta disponible");
+            return Retorno.error2();
+        }
+        if (estacion == null) {
+            System.out.println("no existe la estacion");
+            return Retorno.error3();
+        }
+        if (estacion.getAnclajesOcupados() == estacion.getCapacidad()) {
+            System.out.println("no hay lugar");
+            return Retorno.error4();
+        }
+
+        if (bicicleta.getEstacionAsignada() != estacion) {
+            if (bicicleta.getEstacionAsignada() == null) {
+                bicicletasEnDeposito.borrarElemento(bicicleta);
+                bicicletasEnEstaciones.agregarOrd(bicicleta);
+                bicicleta.setEstacionAsignada(estacion);
+            } else {
+                bicicleta.setEstacionAsignada(estacion);
+            }
+        } else {
+            System.out.println("La bicicleta ya está asignada a esta estación");
+        }
+
+        return Retorno.ok();
     }
 
     @Override
