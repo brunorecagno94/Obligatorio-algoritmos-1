@@ -433,9 +433,16 @@ public class Sistema implements IObligatorio {
         return usuarios.obtenerElemento(new Usuario(cedula));
     }
 
+    public Alquiler pasarDeColaDeEsperaAAlquiler(Estacion estacion, Bicicleta bicicleta){        
+        Alquiler nuevoAlquiler = estacion.sacarAlquilerDeColaDeEspera();
+        nuevoAlquiler.setBicicleta(bicicleta.getCodigo());
+        alquileresAsignados.push(nuevoAlquiler);
+        return nuevoAlquiler;
+    }
+    
     // =================================================
     // Para Tests
-    // =================================================
+    // ==========================S=======================
     public void cambiarEstadoBicicleta(String codigo, String estado) {
 
         Bicicleta bicicleta = encontrarBicicleta(codigo);
