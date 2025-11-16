@@ -12,20 +12,18 @@ public class Test2_07EliminarEstacion {
     @Before
     public void setUp() {
         s.crearSistemaDeGestion();
+        s.registrarBicicleta("123456", "URBANA");
+        s.registrarEstacion("Estacion Centro", "Centro", 15);
     }
 
     @Test
-    public void RepararBicicletaOk() {
-        s.registrarEstacion("Estacion Centro", "Centro", 15);
+    public void EliminarEstacionOk() {
         retorno = s.eliminarEstacion("Estacion Centro");
-
         assertEquals(Retorno.Resultado.OK, retorno.getResultado());
     }
 
     @Test
-    public void RepararBicicletaError01() {
-        s.registrarEstacion("Estacion Centro", "Centro", 15);
-        
+    public void EliminarEstacionError01() {        
         retorno = s.eliminarEstacion("");
         assertEquals(Retorno.Resultado.ERROR_1, retorno.getResultado());
 
@@ -34,14 +32,16 @@ public class Test2_07EliminarEstacion {
     }
 
     @Test
-    public void RepararBicicletaError02() {
-        s.registrarEstacion("Estacion Centro", "Centro", 15);
+    public void EliminarEstacionError02() {
+//        s.registrarEstacion("Estacion Centro", "Centro", 15);
         retorno = s.eliminarEstacion("Estacion Union");
         assertEquals(Retorno.Resultado.ERROR_2, retorno.getResultado());
     }
 
     @Test
-    public void RepararBicicletaError03() {
-        // FALTA IMPLEMENTAR CUANDO TENGAMOS COLA DE ESPERA
+    public void EliminarEstacionError03() {
+        s.asignarBicicletaAEstacion("123456", "Estacion Centro");
+        retorno = s.eliminarEstacion("Estacion Centro");
+        assertEquals(Retorno.Resultado.ERROR_3, retorno.getResultado());
     }
 }

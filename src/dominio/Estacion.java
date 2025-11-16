@@ -115,4 +115,12 @@ public class Estacion implements Comparable {
             System.out.println("Alquiler en cola de espera");
         }       
     }
+    
+    public void ocuparAnclaje() {
+        this.anclajesOcupados++;
+    }
+    
+    public void liberarAnclaje() {
+        this.anclajesOcupados--;
+    }
 }
