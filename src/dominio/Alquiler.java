@@ -2,10 +2,9 @@ package dominio;
 
 public class Alquiler implements Comparable{
     private static int id = 0;
-    private Usuario usuario;
-    private Bicicleta bicicleta;
-    private Estacion estacion;
-    private boolean finalizado;
+    private String usuario;
+    private String bicicleta;
+    private String estacion;    
 
     public static int getId() {
         return id;
@@ -15,43 +14,41 @@ public class Alquiler implements Comparable{
         Alquiler.id = id;
     }
 
-    public Usuario getUsuario() {
+    public String getUsuario() {
         return usuario;
     }
 
-    public void setUsuario(Usuario usuario) {
+    public void setUsuario(String usuario) {
         this.usuario = usuario;
     }
 
-    public Bicicleta getBicicleta() {
+    public String getBicicleta() {
         return bicicleta;
     }
 
-    public void setBicicleta(Bicicleta bicicleta) {
+    public void setBicicleta(String bicicleta) {
         this.bicicleta = bicicleta;
     }
 
-    public Estacion getEstacion() {
+    public String getEstacion() {
         return estacion;
     }
 
-    public void setEstacion(Estacion estacion) {
+    public void setEstacion(String estacion) {
         this.estacion = estacion;
     }
 
-    public boolean isFinalizado() {
-        return finalizado;
+    
+    public Alquiler(String usuario, String estacion) {
+        this.usuario = usuario;
+        this.bicicleta = null;
+        this.estacion = estacion;
     }
 
-    public void setFinalizado(boolean finalizado) {
-        this.finalizado = finalizado;
-    }
-
-    public Alquiler(Usuario usuario, Bicicleta bicicleta, Estacion estacion, boolean finalizado) {
+    public Alquiler(String usuario, String bicicleta, String estacion) {
         this.usuario = usuario;
         this.bicicleta = bicicleta;
         this.estacion = estacion;
-        this.finalizado = finalizado;
     }
 
     @Override
@@ -59,5 +56,11 @@ public class Alquiler implements Comparable{
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
     
-    
+    @Override
+    public String toString(){
+        return "Alquiler"+ id + 
+                "- usuario: " + usuario + 
+                "| bicicleta: " + bicicleta + 
+                "| estación: " + estacion;
+    }
 }

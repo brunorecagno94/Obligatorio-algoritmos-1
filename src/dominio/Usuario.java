@@ -7,7 +7,7 @@ public class Usuario implements Comparable {
 
     private String cedula;
     private String nombre;
-    //private ListaNodos<Alquiler> alquileres;
+    private ListaNodos<Alquiler> alquileres;
 
     // Getters
     public String getCedula() {
@@ -18,9 +18,10 @@ public class Usuario implements Comparable {
         return nombre;
     }
 
-//    public ListaNodos getAlquileres() {
-//        return alquileres;
-//    }
+    public ListaNodos getAlquileres() {
+        return alquileres;
+    }
+    
     // Setters
     public void setCedula(String cedula) {
         this.cedula = cedula;
@@ -30,9 +31,9 @@ public class Usuario implements Comparable {
         this.nombre = nombre;
     }
 
-//    public void setAlquileres(ListaNodos alquileres) {
-//        this.alquileres = alquileres;
-//    }
+    public void setAlquileres(ListaNodos alquileres) {
+        this.alquileres = alquileres;
+    }
     
     public Usuario(String cedula) {
         this.cedula = cedula;
@@ -41,7 +42,7 @@ public class Usuario implements Comparable {
     public Usuario(String cedula, String nombre) {
         this.cedula = cedula;
         this.nombre = nombre;
-        //this.alquileres = new ListaNodos<Alquiler>();
+        this.alquileres = new ListaNodos<Alquiler>();
     }
 
     @Override
@@ -70,5 +71,20 @@ public class Usuario implements Comparable {
         final Usuario other = (Usuario) obj;
         return Objects.equals(this.cedula, other.cedula);
     }
+    
+    public void agregarAlquiler(Alquiler alquiler){
+        this.alquileres.agregarOrd(alquiler);
+    }
+    
+    public void mostrarAlquileres(){
+        if(alquileres.cantElementos() == 0){
+            System.out.println("El usuario no tiene alquileres");
+        }else{
+            for(int i=0; i < this.alquileres.cantElementos(); i++){
+            System.out.println(alquileres.obtenerElementoEnPosicion(i));
+            }
+        }      
+    }
+    
 
 }

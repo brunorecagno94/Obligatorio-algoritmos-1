@@ -83,6 +83,18 @@ public class Bicicleta implements Comparable {
         this.codigo = codigo;
         this.tipo = tipo;
         this.estado = estado;
+        this.estacionAsignada = null;
+        this.usuarioAsignado = null;
+        this.motivoDeMantenimiento = null;
+    }
+    
+    public Bicicleta(String codigo, String tipo, String estado, Estacion estacion){
+        this.codigo = codigo;
+        this.tipo = tipo;
+        this.estado = estado;
+        this.estacionAsignada = estacion;
+        this.usuarioAsignado = null;
+        this.motivoDeMantenimiento = null;
     }
 
     public boolean isEnDeposito() {

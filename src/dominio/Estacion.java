@@ -9,7 +9,7 @@ public class Estacion implements Comparable {
     private String barrio;
     private int capacidad;
     private int anclajesOcupados;
-    private ColaNodos<Usuario> colaEsperaAlquiler;
+    private ColaNodos<Alquiler> colaEsperaAlquiler;
     private ColaNodos<Usuario> colaEsperaAnclaje;
 
     // Getters
@@ -29,7 +29,7 @@ public class Estacion implements Comparable {
         return anclajesOcupados;
     }
 
-    public ColaNodos<Usuario> getColaEsperaAlquiler() {
+    public ColaNodos<Alquiler> getColaEsperaAlquiler() {
         return colaEsperaAlquiler;
     }
 
@@ -54,7 +54,7 @@ public class Estacion implements Comparable {
         this.anclajesOcupados = anclajesOcupados;
     }
 
-    public void setColaEsperaAlquiler(ColaNodos<Usuario> colaEsperaAlquiler) {
+    public void setColaEsperaAlquiler(ColaNodos<Alquiler> colaEsperaAlquiler) {
         this.colaEsperaAlquiler = colaEsperaAlquiler;
     }
 
@@ -74,6 +74,7 @@ public class Estacion implements Comparable {
         this.barrio = barrio;
         this.capacidad = capacidad;
         this.anclajesOcupados = 0;
+        this.colaEsperaAlquiler = new ColaNodos<Alquiler>(capacidad);
     }
 
     // Constructor para test
@@ -82,6 +83,7 @@ public class Estacion implements Comparable {
         this.barrio = barrio;
         this.capacidad = capacidad;
         this.anclajesOcupados = anclajesOcupados;
+        this.colaEsperaAlquiler = new ColaNodos<Alquiler>(capacidad);
     }
         
     // Metodos
@@ -103,5 +105,14 @@ public class Estacion implements Comparable {
     public boolean equals(Object obj) {
         Estacion e2 = (Estacion) obj;
         return this.nombre.equals(e2.nombre);
+    }
+    
+    public void ponerAlquilerEnColaDeEspera(Alquiler alquiler){
+        if(this.colaEsperaAlquiler.esLlena()){
+            System.out.println("No hay lugar en la cola de espera, debes intentar alquilar más tarde");
+        }else{
+            this.colaEsperaAlquiler.encolar(alquiler);
+            System.out.println("Alquiler en cola de espera");
+        }       
     }
 }
