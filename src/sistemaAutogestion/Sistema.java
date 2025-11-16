@@ -44,22 +44,13 @@ public class Sistema implements IObligatorio {
         s.registrarEstacionConAnclajes("Estacion1", "Cordon", 20, 0);
         s.registrarEstacionConAnclajes("Estacion2", "Centro", 20, 0);
         s.registrarEstacionConAnclajes("Estacion3", "Carrasco", 20, 0);
-        s.asignarBicicletaAEstacion("123456", "Estacion2");
+//        s.asignarBicicletaAEstacion("123456", "Estacion2");
 
-        System.out.println("Deposito:");
-        s.bicicletasEnDeposito.mostrar();
-        System.out.println("Estacion:");
-        s.bicicletasEnEstaciones.mostrar();
-            System.out.println("Estaciones:");
+        
         s.estaciones.mostrar();
-
-        s.marcarEnMantenimiento("123456", "SE ROMPER TODOOO");
-        System.out.println("Post mantenimiento ------------------");
-        System.out.println("Deposito:");
-        s.bicicletasEnDeposito.mostrar();
-        System.out.println("Estacion:");
-        s.bicicletasEnEstaciones.mostrar();
-     System.out.println("Estaciones:");
+        s.eliminarEstacion("Estacion1");
+        System.out.println(".----");
+        
         s.estaciones.mostrar();
 
 
@@ -212,8 +203,9 @@ public class Sistema implements IObligatorio {
         }
 
         if (estacion.getAnclajesOcupados() > 0
-                || estacion.getColaEsperaAnclaje() != null
-                || estacion.getColaEsperaAlquiler() != null) {
+                || !estacion.getColaEsperaAnclaje().esVacia()
+                || !estacion.getColaEsperaAlquiler().esVacia()) {
+            System.out.println("Viejo no podés: " + estacion.getColaEsperaAlquiler());
             return Retorno.error3();
         }
 

@@ -74,7 +74,8 @@ public class Estacion implements Comparable {
         this.barrio = barrio;
         this.capacidad = capacidad;
         this.anclajesOcupados = 0;
-        this.colaEsperaAlquiler = new ColaNodos<Alquiler>(capacidad);
+        this.colaEsperaAlquiler = new ColaNodos<Alquiler>();
+        this.colaEsperaAnclaje = new ColaNodos<Usuario>();
     }
 
     // Constructor para test
@@ -83,7 +84,8 @@ public class Estacion implements Comparable {
         this.barrio = barrio;
         this.capacidad = capacidad;
         this.anclajesOcupados = anclajesOcupados;
-        this.colaEsperaAlquiler = new ColaNodos<Alquiler>(capacidad);
+        this.colaEsperaAlquiler = new ColaNodos<Alquiler>();
+        this.colaEsperaAnclaje = new ColaNodos<Usuario>();
     }
         
     // Metodos

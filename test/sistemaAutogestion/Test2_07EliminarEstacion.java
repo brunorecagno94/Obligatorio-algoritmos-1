@@ -33,7 +33,6 @@ public class Test2_07EliminarEstacion {
 
     @Test
     public void EliminarEstacionError02() {
-//        s.registrarEstacion("Estacion Centro", "Centro", 15);
         retorno = s.eliminarEstacion("Estacion Union");
         assertEquals(Retorno.Resultado.ERROR_2, retorno.getResultado());
     }

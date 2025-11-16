@@ -7,10 +7,10 @@ public class ColaNodos<T> implements ICola<T> {
     private int cantMax;
     private int cantidad;
 
-    public ColaNodos(int cantMax) {
+    public ColaNodos() {
         this.frente = null;
         this.fondo = null;
-        this.cantMax = cantMax;
+        this.cantMax = 50;
         this.cantidad = 0;
     }
 
