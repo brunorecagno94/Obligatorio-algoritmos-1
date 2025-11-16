@@ -203,8 +203,8 @@ public class Sistema implements IObligatorio {
         }
 
         if (estacion.getAnclajesOcupados() > 0
-                || estacion.getColaEsperaAnclaje() != null
-                || estacion.getColaEsperaAlquiler() != null) {
+                || !estacion.getColaEsperaAnclaje().esVacia()
+                || !estacion.getColaEsperaAlquiler().esVacia()) {
             System.out.println("Viejo no podés: " + estacion.getColaEsperaAlquiler());
             return Retorno.error3();
         }
