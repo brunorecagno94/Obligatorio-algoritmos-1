@@ -116,9 +116,18 @@ public class Estacion implements Comparable {
         }       
     }
     
+<<<<<<< HEAD
     public Alquiler sacarAlquilerDeColaDeEspera(){
         Alquiler alquiler = this.colaEsperaAlquiler.frente();
         colaEsperaAlquiler.desencolar();
         return alquiler;      
+=======
+    public void ocuparAnclaje() {
+        this.anclajesOcupados++;
+    }
+    
+    public void liberarAnclaje() {
+        this.anclajesOcupados--;
+>>>>>>> ff9d59e2e04125a7e40c826864104c9184b42da0
     }
 }
