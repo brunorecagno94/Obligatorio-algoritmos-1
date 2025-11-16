@@ -115,4 +115,10 @@ public class Estacion implements Comparable {
             System.out.println("Alquiler en cola de espera");
         }       
     }
+    
+    public Alquiler sacarAlquilerDeColaDeEspera(){
+        Alquiler alquiler = this.colaEsperaAlquiler.frente();
+        colaEsperaAlquiler.desencolar();
+        return alquiler;      
+    }
 }

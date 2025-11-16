@@ -264,10 +264,19 @@ public class Sistema implements IObligatorio {
         if (bicicleta.getEstacionAsignada() != estacion) {
             if (bicicleta.getEstacionAsignada() == null) {
                 bicicletasEnDeposito.borrarElemento(bicicleta);
-                bicicletasEnEstaciones.agregarOrd(bicicleta);
                 bicicleta.setEstacionAsignada(estacion);
-            } else {
+                bicicletasEnEstaciones.agregarOrd(bicicleta);                
+            }else{
                 bicicleta.setEstacionAsignada(estacion);
+            }                     
+            
+            //Si la estación tiene alquileres en cola de espera, 
+            //asignar la bicicleta a un alquiler
+            if(estacion.getColaEsperaAlquiler().cantElementos()!= 0){
+              Alquiler alquiler = pasarDeColaDeEsperaAAlquiler(estacion, bicicleta);
+              bicicleta.setEstado("Alquilada");
+              bicicleta.setUsuarioAsignado(encontrarUsuario(alquiler.getUsuario()));
+              System.out.println("La bicicleta fue alquilada por un usuario en cola de espera");
             }
         } else {
             System.out.println("La bicicleta ya está asignada a esta estación");
@@ -294,7 +303,6 @@ public class Sistema implements IObligatorio {
          Bicicleta bicicleta = bicicletaDisponibleEnEstacion(estacion);
          
          if(bicicleta != null){
-             bicicleta.setEstacionAsignada(null);
              bicicleta.setEstado("Alquilada");
              bicicleta.setUsuarioAsignado(usuario);
 
@@ -403,7 +411,13 @@ public class Sistema implements IObligatorio {
     // Métodos custom 
     // =================================================
     public Bicicleta encontrarBicicleta(String codigo) {
-        return bicicletasEnEstaciones.obtenerElemento(new Bicicleta(codigo));
+         Bicicleta bicicleta = bicicletasEnEstaciones.obtenerElemento(new Bicicleta(codigo));
+
+        if (bicicleta == null) {
+            bicicleta = bicicletasEnDeposito.obtenerElemento(new Bicicleta(codigo));
+        }
+
+        return bicicleta;
     }
 
     public Estacion encontrarEstacion(String nombre) {
@@ -428,6 +442,12 @@ public class Sistema implements IObligatorio {
         return usuarios.obtenerElemento(new Usuario(cedula));
     }
     
+    public Alquiler pasarDeColaDeEsperaAAlquiler(Estacion estacion, Bicicleta bicicleta){        
+        Alquiler nuevoAlquiler = estacion.sacarAlquilerDeColaDeEspera();
+        nuevoAlquiler.setBicicleta(bicicleta.getCodigo());
+        alquileresAsignados.push(nuevoAlquiler);
+        return nuevoAlquiler;
+    }
     // =================================================
     // Para Tests
     // =================================================
