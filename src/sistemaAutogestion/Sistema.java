@@ -39,11 +39,15 @@ public class Sistema implements IObligatorio {
         Estacion e2 = new Estacion("Estacion2", "Centro", 12, 4);
         Estacion e3 = new Estacion("Estacion3", "Carrasco", 48, 10);
 
+        
         s.registrarBicicleta("123456", "MOUNTAIN");
         s.registrarBicicleta("789123", "URBANA");
         s.registrarEstacionConAnclajes("Estacion1", "Cordon", 35, 12);
         s.registrarEstacionConAnclajes("Estacion2", "Centro", 12, 4);
         s.registrarEstacionConAnclajes("Estacion3", "Carrasco", 48, 10);
+        s.registrarUsuario("12345678", "Florencia");
+        s.registrarUsuario("23456789", "Juana");
+        
 
         System.out.println("Deposito:");
         s.bicicletasEnDeposito.mostrar();
@@ -52,12 +56,18 @@ public class Sistema implements IObligatorio {
 
         System.out.println("------------------");
 
-        s.asignarBicicletaAEstacion("123456", "Estacion1");
-        s.asignarBicicletaAEstacion("123456", "Estacion1");
-        System.out.println("Deposito:");
-        s.bicicletasEnDeposito.mostrar();
-        System.out.println("Estacion:");
-        s.bicicletasEnEstaciones.mostrar();
+        
+        s.asignarBicicletaAEstacion("123456", "Estacion2");
+        s.alquilarBicicleta("12345678", "Estacion2");
+        s.alquilarBicicleta("23456789","Estacion2");
+        
+        Usuario usuario1 = s.encontrarUsuario("12345678");
+        
+        usuario1.mostrarAlquileres();
+        
+        
+        
+      
     }
 
     @Override
@@ -268,7 +278,34 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno alquilarBicicleta(String cedula, String nombreEstacion) {
-        return Retorno.noImplementada();
+         if (cedula == null
+                || cedula.isBlank()
+                || nombreEstacion == null
+                || nombreEstacion.isBlank()) {
+            return Retorno.error1();
+        }
+        
+         Usuario usuario = encontrarUsuario(cedula);       
+         if(usuario == null) return Retorno.error2();
+
+         Estacion estacion = encontrarEstacion(nombreEstacion);
+         if(estacion == null)return Retorno.error3();
+         
+         Bicicleta bicicleta = bicicletaDisponibleEnEstacion(estacion);
+         
+         if(bicicleta != null){
+             bicicleta.setEstacionAsignada(null);
+             bicicleta.setEstado("Alquilada");
+             bicicleta.setUsuarioAsignado(usuario);
+
+             Alquiler alquiler = new Alquiler(usuario.getCedula(), bicicleta.getCodigo(), estacion.getNombre());
+             alquileresAsignados.push(alquiler);
+             usuario.agregarAlquiler(alquiler);
+             return Retorno.ok("Alquiler exitoso");
+         }else{
+             estacion.ponerAlquilerEnColaDeEspera(new Alquiler(usuario.getCedula(), estacion.getNombre()));
+             return Retorno.ok();
+         }           
     }
 
     @Override
@@ -366,27 +403,34 @@ public class Sistema implements IObligatorio {
     // Métodos custom 
     // =================================================
     public Bicicleta encontrarBicicleta(String codigo) {
-
-        Bicicleta bicicleta = bicicletasEnEstaciones.obtenerElemento(new Bicicleta(codigo));
-
-        if (bicicleta == null) {
-            bicicleta = bicicletasEnDeposito.obtenerElemento(new Bicicleta(codigo));
-        }
-
-        return bicicleta;
+        return bicicletasEnEstaciones.obtenerElemento(new Bicicleta(codigo));
     }
 
     public Estacion encontrarEstacion(String nombre) {
-        Estacion estacion = estaciones.obtenerElemento(new Estacion(nombre));
-
-        if (estacion == null) {
-            System.out.println("No se encontró la estación");
-        }
-
-        return estacion;
+        return estaciones.obtenerElemento(new Estacion(nombre));
     }
-
+    
+    public Bicicleta bicicletaDisponibleEnEstacion(Estacion estacion){
+        int i=0;
+        while(i< bicicletasEnEstaciones.cantElementos()){
+           Bicicleta bici = bicicletasEnEstaciones.obtenerElementoEnPosicion(i);
+           if(bici.getEstacionAsignada() != null){
+               if(bici.getEstacionAsignada().equals(estacion) && bici.getEstado().equals("Disponible")){
+               return bici;
+            }
+           }          
+           i++;
+        }       
+        return null;
+    }
+    
+    public Usuario encontrarUsuario(String cedula){
+        return usuarios.obtenerElemento(new Usuario(cedula));
+    }
+    
+    // =================================================
     // Para Tests
+    // =================================================
     public void cambiarEstadoBicicleta(String codigo, String estado) {
 
         Bicicleta bicicleta = encontrarBicicleta(codigo);
