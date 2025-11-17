@@ -10,7 +10,7 @@ public class Estacion implements Comparable {
     private int capacidad;
     private int anclajesOcupados;
     private ColaNodos<Alquiler> colaEsperaAlquiler;
-    private ColaNodos<Usuario> colaEsperaAnclaje;
+    private ColaNodos<Bicicleta> colaEsperaAnclaje;
 
     // Getters
     public String getNombre() {
@@ -33,7 +33,7 @@ public class Estacion implements Comparable {
         return colaEsperaAlquiler;
     }
 
-    public ColaNodos<Usuario> getColaEsperaAnclaje() {
+    public ColaNodos<Bicicleta> getColaEsperaAnclaje() {
         return colaEsperaAnclaje;
     }
 
@@ -58,7 +58,7 @@ public class Estacion implements Comparable {
         this.colaEsperaAlquiler = colaEsperaAlquiler;
     }
 
-    public void setColaEsperaAnclaje(ColaNodos<Usuario> colaEsperaAnclaje) {
+    public void setColaEsperaAnclaje(ColaNodos<Bicicleta> colaEsperaAnclaje) {
         this.colaEsperaAnclaje = colaEsperaAnclaje;
     }
 
@@ -75,7 +75,7 @@ public class Estacion implements Comparable {
         this.capacidad = capacidad;
         this.anclajesOcupados = 0;
         this.colaEsperaAlquiler = new ColaNodos<Alquiler>();
-        this.colaEsperaAnclaje = new ColaNodos<Usuario>();
+        this.colaEsperaAnclaje = new ColaNodos<Bicicleta>();
     }
 
     // Constructor para test
@@ -85,7 +85,7 @@ public class Estacion implements Comparable {
         this.capacidad = capacidad;
         this.anclajesOcupados = anclajesOcupados;
         this.colaEsperaAlquiler = new ColaNodos<Alquiler>();
-        this.colaEsperaAnclaje = new ColaNodos<Usuario>();
+        this.colaEsperaAnclaje = new ColaNodos<Bicicleta>();
     }
         
     // Metodos
@@ -118,17 +118,32 @@ public class Estacion implements Comparable {
         }       
     }
     
-
     public Alquiler sacarAlquilerDeColaDeEspera(){
         Alquiler alquiler = this.colaEsperaAlquiler.frente();
         colaEsperaAlquiler.desencolar();
         return alquiler;      
     }
+    
     public void ocuparAnclaje() {
         this.anclajesOcupados++;
     }
     
     public void liberarAnclaje() {
         this.anclajesOcupados--;
+    }
+    
+    public void ponerBicicletaEnColaDeEsperaAnclaje(Bicicleta bicicleta){
+        if(this.colaEsperaAnclaje.esLlena()){
+            System.out.println("No hay lugar en la cola de espera, debes intentar más tarde");
+        }else{
+            this.colaEsperaAnclaje.encolar(bicicleta);
+            System.out.println("Bicicleta en cola de espera de anclaje");
+        }
+    }
+    
+    public Bicicleta sacarBicicletaDeColaDeEsperaAnclaje(){
+        Bicicleta bicicleta = this.colaEsperaAnclaje.frente();
+        colaEsperaAnclaje.desencolar();
+        return bicicleta;
     }
 }
