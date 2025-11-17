@@ -34,7 +34,6 @@ public class Sistema implements IObligatorio {
         Sistema s = new Sistema();
         Bicicleta b1 = new Bicicleta("123456", "MOUNTAIN");
         Bicicleta b2 = new Bicicleta("789123", "URBANA");
-        Bicicleta b3 = new Bicicleta("231423", "URBANA");
 
         Estacion e1 = new Estacion("Estacion1", "Cordon", 35, 12);
         Estacion e2 = new Estacion("Estacion2", "Centro", 12, 4);
@@ -42,15 +41,19 @@ public class Sistema implements IObligatorio {
 
         s.registrarBicicleta("123456", "MOUNTAIN");
         s.registrarBicicleta("789123", "URBANA");
-        s.registrarBicicleta("654321", "URBANA");
         s.registrarEstacionConAnclajes("Estacion1", "Cordon", 20, 0);
         s.registrarEstacionConAnclajes("Estacion2", "Centro", 20, 0);
         s.registrarEstacionConAnclajes("Estacion3", "Carrasco", 20, 0);
-        s.asignarBicicletaAEstacion("789123", "Estacion2");
-        s.asignarBicicletaAEstacion("123456", "Estacion2");
-        s.asignarBicicletaAEstacion("654321", "Estacion2");
+//        s.asignarBicicletaAEstacion("123456", "Estacion2");
 
-        s.listarBicicletasDeEstacion("Estacion2");
+        
+        s.estaciones.mostrar();
+        s.eliminarEstacion("Estacion1");
+        System.out.println(".----");
+        
+        s.estaciones.mostrar();
+
+
     }
 
     @Override
@@ -185,6 +188,9 @@ public class Sistema implements IObligatorio {
         return Retorno.ok();
     }
 
+    // =====================================================
+    //  TESTEAR CUANDO TERMINEMOS CON COLAS DE ESPERA:
+    // =====================================================
     @Override
     public Retorno eliminarEstacion(String nombre) {
         if (nombre == null || nombre.isBlank()) {
@@ -213,6 +219,7 @@ public class Sistema implements IObligatorio {
                 || codigo.isBlank()
                 || nombreEstacion == null
                 || nombreEstacion.isBlank()) {
+            System.out.println("ingresa bien los datos master");
             return Retorno.error1();
         }
 
@@ -242,22 +249,26 @@ public class Sistema implements IObligatorio {
             if (bicicleta.getEstacionAsignada() == null) {
                 bicicletasEnDeposito.borrarElemento(bicicleta);
                 bicicleta.setEstacionAsignada(estacion);
-                bicicletasEnEstaciones.agregarOrd(bicicleta);
-                estacion.ocuparAnclaje();
-            } else {
+                bicicletasEnEstaciones.agregarOrd(bicicleta);                
+            }else{
                 bicicleta.setEstacionAsignada(estacion);
-                estacion.ocuparAnclaje();
-            }
-
+            }                     
+            
             //Si la estación tiene alquileres en cola de espera, 
             //asignar la bicicleta a un alquiler
-            if (estacion.getColaEsperaAlquiler().cantElementos() != 0) {
-                Alquiler alquiler = pasarDeColaDeEsperaAAlquiler(estacion, bicicleta);
-                bicicleta.setEstado("Alquilada");
-                bicicleta.setUsuarioAsignado(encontrarUsuario(alquiler.getUsuario()));
-                System.out.println("La bicicleta fue alquilada por un usuario en cola de espera");
-                estacion.ocuparAnclaje();
+            if(estacion.getColaEsperaAlquiler().cantElementos()!= 0){
+              Alquiler alquiler = pasarDeColaDeEsperaAAlquiler(estacion, bicicleta);
+              Usuario usuario = encontrarUsuario(alquiler.getUsuario());
+              
+              bicicleta.setEstado("Alquilada");
+              bicicleta.setUsuarioAsignado(usuario);
+              usuario.agregarAlquiler(alquiler);
+              
+              System.out.println("La bicicleta fue alquilada por un usuario en cola de espera");            
+            }else{
+              estacion.ocuparAnclaje();
             }
+            
         } else {
             System.out.println("La bicicleta ya está asignada a esta estación");
         }
@@ -287,6 +298,7 @@ public class Sistema implements IObligatorio {
         Bicicleta bicicleta = bicicletaDisponibleEnEstacion(estacion);
 
         if (bicicleta != null) {
+            estacion.liberarAnclaje();
             bicicleta.setEstacionAsignada(null);
             bicicleta.setEstado("Alquilada");
             bicicleta.setUsuarioAsignado(usuario);
@@ -303,7 +315,44 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno devolverBicicleta(String cedula, String nombreEstacionDestino) {
-        return Retorno.noImplementada();
+        if (cedula == null
+                || cedula.isBlank()
+                || nombreEstacionDestino == null
+                || nombreEstacionDestino.isBlank()) {
+            return Retorno.error1();
+        }
+        
+        Usuario usuarioDevuelve = encontrarUsuario(cedula);
+        if(usuarioDevuelve == null) return Retorno.error2();
+        
+        Bicicleta bicicleta = bicicletaAlquiladaPorUsuario(usuarioDevuelve);
+        if(bicicleta == null) return Retorno.error2();
+        
+        Estacion estacionDestino = encontrarEstacion(nombreEstacionDestino);
+        if(estacionDestino == null) return Retorno.error3();
+        
+        if(estacionDestino.getColaEsperaAlquiler().cantElementos() != 0){
+            Alquiler alquiler = pasarDeColaDeEsperaAAlquiler(estacionDestino, bicicleta);
+            Usuario usuarioAlquila = encontrarUsuario(alquiler.getUsuario());
+              
+            bicicleta.setUsuarioAsignado(usuarioAlquila);
+            usuarioAlquila.agregarAlquiler(alquiler);
+              
+            return Retorno.ok("La bicicleta fue alquilada por un usuario en cola de espera");
+            
+        }else{          
+            if(estacionDestino.getAnclajesOcupados() == estacionDestino.getCapacidad()){
+                estacionDestino.ponerBicicletaEnColaDeEsperaAnclaje(bicicleta);
+                return Retorno.ok();  
+            }else{
+              bicicleta.setEstacionAsignada(estacionDestino);
+              bicicleta.setEstado("Disponible");
+              bicicleta.setUsuarioAsignado(null);
+              
+              estacionDestino.ocuparAnclaje();
+              return Retorno.ok("La bicicleta fue anclada en la estación exitosamente.");
+            }
+        }          
     }
 
     @Override
@@ -347,16 +396,7 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno listarBicicletasDeEstacion(String nombreEstacion) {
-        String listaEstaciones = "";
-        
-        for (int i = 0; i < bicicletasEnEstaciones.cantElementos(); i++) {
-            Bicicleta bicicleta = bicicletasEnEstaciones.obtenerElementoEnPosicion(i);
-            if (bicicleta.getEstacionAsignada().getNombre() == nombreEstacion) {
-                listaEstaciones += bicicleta.getCodigo() + "|";
-            }
-        }
-   
-        return Retorno.ok(listaEstaciones);
+        return Retorno.noImplementada();
     }
 
     @Override
@@ -372,6 +412,7 @@ public class Sistema implements IObligatorio {
             Estacion estacion = estaciones.obtenerElementoEnPosicion(i);
 
             if (estacion.getAnclajesOcupados() > n) {
+                System.out.println("+1 estacion");
                 cantidadEstaciones++;
             }
         }
@@ -435,13 +476,27 @@ public class Sistema implements IObligatorio {
         return usuarios.obtenerElemento(new Usuario(cedula));
     }
 
-    public Alquiler pasarDeColaDeEsperaAAlquiler(Estacion estacion, Bicicleta bicicleta) {
+    public Alquiler pasarDeColaDeEsperaAAlquiler(Estacion estacion, Bicicleta bicicleta){        
         Alquiler nuevoAlquiler = estacion.sacarAlquilerDeColaDeEspera();
         nuevoAlquiler.setBicicleta(bicicleta.getCodigo());
         alquileresAsignados.push(nuevoAlquiler);
         return nuevoAlquiler;
     }
-
+    
+    public Bicicleta bicicletaAlquiladaPorUsuario(Usuario usuario){
+        if(bicicletasEnEstaciones.cantElementos() != 0){
+            for(int i=0; i< bicicletasEnEstaciones.cantElementos(); i++){
+                Bicicleta b = bicicletasEnEstaciones.obtenerElementoEnPosicion(i);
+                if(b.getUsuarioAsignado()!=null && 
+                        b.getUsuarioAsignado().equals(usuario) && 
+                        b.getEstado().equals("Alquilada")){
+                    return b;
+                }
+            } 
+        }
+        return null;
+    }
+    
     // =================================================
     // Para Tests
     // ==========================S=======================
@@ -453,7 +508,7 @@ public class Sistema implements IObligatorio {
             System.out.println("No se encontró la bicicleta");
         }
 
-        if (bicicleta != null && bicicleta.getEstado() == "Disponible") {
+        if (bicicleta != null && bicicleta.getEstado().contains("Disponible")) {
             if (estado.contains("Alquilada")) {
                 bicicleta.setEstado(estado);
                 bicicletasEnEstaciones.agregarOrd(bicicleta);

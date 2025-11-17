@@ -24,6 +24,15 @@ public class Test2_09AlquilarBicicleta {
         retorno = s.alquilarBicicleta("12345678", "Estación Centro");
         assertEquals(Retorno.Resultado.OK, retorno.getResultado());
     }
+    
+    @Test
+    public void alquilarBicicletaOk_NoHayBicicletaDisponible() {
+        s.registrarUsuario("12345678", "Florencia");
+        s.registrarEstacion("Estación Centro", "Centro", 10);
+        
+        retorno = s.alquilarBicicleta("12345678", "Estación Centro");
+        assertEquals(Retorno.Resultado.OK, retorno.getResultado());
+    }
 
     @Test
     public void alquilarBicicletaError01() {
@@ -70,7 +79,6 @@ public class Test2_09AlquilarBicicleta {
         retorno = s.alquilarBicicleta("12345678", "Estación Centro");
         assertEquals(Retorno.Resultado.ERROR_3, retorno.getResultado());
     }
-
 
 }
 
