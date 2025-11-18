@@ -58,9 +58,15 @@ public class Alquiler implements Comparable{
     
     @Override
     public String toString(){
-        return "Alquiler"+ id + 
-                "- usuario: " + usuario + 
-                "| bicicleta: " + bicicleta + 
-                "| estación: " + estacion;
+        return bicicleta +"#"+usuario+"#"+estacion;
+    }
+    
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true;            
+        if (obj == null) return false; 
+        
+        Alquiler a2 = (Alquiler) obj;
+        return this.getId() == (a2.getId());
     }
 }

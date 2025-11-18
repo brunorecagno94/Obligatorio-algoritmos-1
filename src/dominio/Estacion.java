@@ -137,7 +137,7 @@ public class Estacion implements Comparable {
             System.out.println("No hay lugar en la cola de espera, debes intentar más tarde");
         }else{
             this.colaEsperaAnclaje.encolar(bicicleta);
-            System.out.println("Bicicleta en cola de espera de anclaje");
+            System.out.println("Bicicleta " + bicicleta + " en cola de espera de anclaje");
         }
     }
     
