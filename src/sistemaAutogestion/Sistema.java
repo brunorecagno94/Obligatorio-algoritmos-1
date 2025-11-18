@@ -398,7 +398,16 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno listarBicicletasDeEstacion(String nombreEstacion) {
-        return Retorno.noImplementada();
+        String listaEstaciones = "";
+        
+        for (int i = 0; i < bicicletasEnEstaciones.cantElementos(); i++) {
+            Bicicleta bicicleta = bicicletasEnEstaciones.obtenerElementoEnPosicion(i);
+            if (bicicleta.getEstacionAsignada().getNombre() == nombreEstacion) {
+                listaEstaciones += bicicleta.getCodigo() + "|";
+            }
+        }
+   
+        return Retorno.ok(listaEstaciones);
     }
 
     @Override
