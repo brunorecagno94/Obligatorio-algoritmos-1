@@ -12,11 +12,11 @@ public class Test3_01ObtenerUsuario {
     @Before
     public void setUp() {
         s.crearSistemaDeGestion();
+        s.registrarUsuario("12345678", "Usuario01");
     }
 
     @Test
     public void obtenerUsuarioOk() {
-        s.registrarUsuario("12345678", "Usuario01");
         retorno = s.obtenerUsuario("12345678");
         assertEquals(Retorno.Resultado.OK, retorno.getResultado());
         assertEquals("Usuario01#12345678", retorno.getValorString());
@@ -24,17 +24,22 @@ public class Test3_01ObtenerUsuario {
 
     @Test
     public void obtenerUsuarioError01() {
-        //Completar
+        retorno = s.obtenerUsuario("");
+        assertEquals(Retorno.Resultado.ERROR_1, retorno.getResultado());
+        retorno = s.obtenerUsuario(null);
+        assertEquals(Retorno.Resultado.ERROR_1, retorno.getResultado());
     }
 
     @Test
     public void obtenerUsuarioError02() {
-        //Completar
+        retorno = s.obtenerUsuario("sdas");
+        assertEquals(Retorno.Resultado.ERROR_2, retorno.getResultado());
     }
 
     @Test
     public void obtenerUsuarioError03() {
-        //Completar
+        retorno = s.obtenerUsuario("11111111");
+        assertEquals(Retorno.Resultado.ERROR_3, retorno.getResultado());
     }
 
 }
