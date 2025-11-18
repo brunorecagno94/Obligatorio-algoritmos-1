@@ -44,7 +44,6 @@ public class Sistema implements IObligatorio {
         s.registrarEstacionConAnclajes("Estacion3", "Carrasco", 20, 0);
 
 //        s.asignarBicicletaAEstacion("123456", "Estacion1");
-
         System.out.println("Alquilo bicis:");
         s.alquilarBicicleta("12345678", "Estacion1");
         s.alquilarBicicleta("12345678", "Estacion1");
@@ -454,7 +453,17 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno usuarioMayor() {
-        return Retorno.noImplementada();
+        String cedulaMayor = "";
+        int contAlquileres = 0;
+
+        for (int i = 0; i < usuarios.cantElementos(); i++) {
+            Usuario usuario = usuarios.obtenerElementoEnPosicion(i);
+            if (usuario.getCantidadAlquileres() > contAlquileres) {
+                cedulaMayor = usuario.getCedula();
+            }
+        }
+
+        return Retorno.ok(cedulaMayor);
     }
 
     // =================================================
