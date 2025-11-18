@@ -86,5 +86,8 @@ public class Usuario implements Comparable {
         }      
     }
     
+    public void eliminarAlquiler(Alquiler alquiler){
+        alquileres.borrarElemento(alquiler);
+    }
 
 }
