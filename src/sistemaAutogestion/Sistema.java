@@ -19,6 +19,7 @@ public class Sistema implements IObligatorio {
     ILista<Bicicleta> bicicletasEnEstaciones;
     ILista<Bicicleta> bicicletasEnDeposito;
     IPila<Alquiler> alquileresAsignados;
+    ILista<Barrio> barrios;
     MapaEstaciones mapaEstaciones;
 
     public Sistema() {
@@ -27,6 +28,7 @@ public class Sistema implements IObligatorio {
         this.bicicletasEnEstaciones = new ListaNodos<Bicicleta>();
         this.bicicletasEnDeposito = new ListaNodos<Bicicleta>();
         this.alquileresAsignados = new PilaNodos<Alquiler>();
+        this.barrios = new ListaNodos<Barrio>();
         this.mapaEstaciones = new MapaEstaciones();
     }
 
@@ -38,21 +40,23 @@ public class Sistema implements IObligatorio {
 
         s.registrarBicicleta("123456", "MOUNTAIN");
         s.registrarBicicleta("789123", "URBANA");
-
-        s.registrarEstacionConAnclajes("Estacion1", "Cordon", 20, 0);
-        s.registrarEstacionConAnclajes("Estacion2", "Centro", 20, 0);
+        s.registrarBicicleta("345678", "URBANA");
+        s.registrarEstacionConAnclajes("Estacion1", "Cordon", 20, 10);
+        s.registrarEstacionConAnclajes("Estacion2", "Centro", 20, 5);
         s.registrarEstacionConAnclajes("Estacion3", "Carrasco", 20, 0);
-
-//        s.asignarBicicletaAEstacion("123456", "Estacion1");
-
-        System.out.println("Alquilo bicis:");
-        s.alquilarBicicleta("12345678", "Estacion1");
-        s.alquilarBicicleta("12345678", "Estacion1");
-        s.alquilarBicicleta("12345678", "Estacion1");
-//        s.alquilarBicicleta("3234568", "Estacion1");
-//        s.alquilarBicicleta("2234562", "Estacion1");
-
-        s.usuariosEnEspera("Estacion1");
+        s.asignarBicicletaAEstacion("123456", "Estacion2");
+        s.asignarBicicletaAEstacion("789123", "Estacion1");
+        s.asignarBicicletaAEstacion("345678", "Estacion3");
+        
+        s.alquilarBicicleta("34567890", "Estacion1");
+        s.alquilarBicicleta("23456789", "Estacion2");
+        s.alquilarBicicleta("12345678", "Estacion3");
+        s.eliminarEstacion("Estacion3");
+        
+        s.estaciones.mostrar();
+        System.out.println(".----");
+        s.ocupacionPromedioXBarrio();
+    
     }
 
     @Override
@@ -80,6 +84,7 @@ public class Sistema implements IObligatorio {
         }
 
         estaciones.agregarOrd(e);
+        agregarABarrio(e);
         return Retorno.ok();
     }
 
@@ -206,6 +211,7 @@ public class Sistema implements IObligatorio {
         }
 
         estaciones.borrarElemento(estacion);
+        eliminarDeBarrio(estacion);
         return Retorno.ok();
     }
 
@@ -405,7 +411,7 @@ public class Sistema implements IObligatorio {
 
         for (int i = 0; i < bicicletasEnEstaciones.cantElementos(); i++) {
             Bicicleta bicicleta = bicicletasEnEstaciones.obtenerElementoEnPosicion(i);
-            if (bicicleta.getEstacionAsignada() != null && bicicleta.getEstacionAsignada().getNombre() == nombreEstacion) {
+            if (bicicleta.getEstacionAsignada().getNombre().equals(nombreEstacion)) {
                 listaEstaciones += bicicleta.getCodigo() + "|";
             }
         }
@@ -437,7 +443,29 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno ocupacionPromedioXBarrio() {
-        return Retorno.noImplementada();
+        if(estaciones.esVacia()){
+            System.out.println("No hay estaciones ingresadas");
+        }else{
+            for(int i=0; i<barrios.cantElementos(); i++){
+                Barrio barrio = barrios.obtenerElementoEnPosicion(i);
+                ListaNodos<Estacion> estacionesDelBarrio = barrio.getEstaciones();
+                
+                int bicisAncladas = 0;
+                int capacidadTotal =0;
+                
+                for(int n=0; n < estacionesDelBarrio.cantElementos(); n++){
+                    Estacion estacion = estacionesDelBarrio.obtenerElementoEnPosicion(n);
+                    
+                    bicisAncladas += estacion.getAnclajesOcupados();
+                    capacidadTotal += estacion.getCapacidad();                   
+                }
+                
+                double porcentaje = ((double) bicisAncladas / capacidadTotal) * 100;
+                barrio.setPorcentajeOcupacion((int) Math.round(porcentaje));
+            }           
+        }      
+        System.out.println(barrios.devolverListaString());
+        return Retorno.ok();
     }
 
     @Override
@@ -538,7 +566,32 @@ public class Sistema implements IObligatorio {
             }
         }
     }
-    // =================================================
+    
+    public Barrio encontrarBarrio(String nombre){
+        return barrios.obtenerElemento(new Barrio(nombre));
+    }
+    
+    public void agregarABarrio(Estacion estacion){
+        Barrio barrioNuevo = new Barrio(estacion.getBarrio());
+        Barrio barrioExistente = barrios.obtenerElemento(barrioNuevo);
+        if(barrioExistente == null){
+            barrioNuevo.agregarEstacion(estacion);
+            barrios.agregarOrd(barrioNuevo);
+        }else{
+            barrioExistente.agregarEstacion(estacion);
+        }            
+    }
+    
+    public void eliminarDeBarrio(Estacion estacion){
+        Barrio barrio = barrios.obtenerElemento(new Barrio(estacion.getBarrio()));
+        barrio.eliminarEstacion(estacion);
+        
+        if(barrio.noTieneEstaciones()){
+            barrios.borrarElemento(barrio);
+        }
+    }
+    
+// =================================================
     // Para Tests
     // ==========================S=======================
 
@@ -587,5 +640,6 @@ public class Sistema implements IObligatorio {
         }
 
         estaciones.agregarOrd(e);
+        agregarABarrio(e);
     }
 }
