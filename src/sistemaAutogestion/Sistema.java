@@ -20,6 +20,7 @@ public class Sistema implements IObligatorio {
     ILista<Bicicleta> bicicletasEnDeposito;
     IPila<Alquiler> alquileresAsignados;
     ILista<Barrio> barrios;
+    ILista<TipoBicicleta> tiposDeBicicleta;
     MapaEstaciones mapaEstaciones;
 
     public Sistema() {
@@ -29,7 +30,10 @@ public class Sistema implements IObligatorio {
         this.bicicletasEnDeposito = new ListaNodos<Bicicleta>();
         this.alquileresAsignados = new PilaNodos<Alquiler>();
         this.barrios = new ListaNodos<Barrio>();
+        this.tiposDeBicicleta = new ListaNodos<TipoBicicleta>();
         this.mapaEstaciones = new MapaEstaciones();
+        
+        this.llenarListaTiposDeBicicleta();
     }
 
     public static void main(String[] args) {
@@ -48,14 +52,17 @@ public class Sistema implements IObligatorio {
         s.asignarBicicletaAEstacion("789123", "Estacion1");
         s.asignarBicicletaAEstacion("345678", "Estacion3");
         
-        s.alquilarBicicleta("34567890", "Estacion1");
-        s.alquilarBicicleta("23456789", "Estacion2");
+        s.alquilarBicicleta("22345628", "Estacion1");
+        s.alquilarBicicleta("32345688", "Estacion2");
         s.alquilarBicicleta("12345678", "Estacion3");
         s.eliminarEstacion("Estacion3");
         
         s.estaciones.mostrar();
+        s.bicicletasEnEstaciones.mostrar();
+        s.tiposDeBicicleta.mostrar();
         System.out.println(".----");
         s.ocupacionPromedioXBarrio();
+        s.rankingTiposPorUso();
     
     }
 
@@ -119,15 +126,19 @@ public class Sistema implements IObligatorio {
         if (codigo.length() != 6) {
             return Retorno.error2();
         }
-        if (!tipo.equals("URBANA")
-                && !tipo.equals("MOUNTAIN")
-                && !tipo.equals("ELECTRICA")) {
-            return Retorno.error3();
+        
+        TipoBiciEnum tipoBici;
+        try {
+            tipoBici = TipoBiciEnum.valueOf(tipo);
+        } catch (IllegalArgumentException e) {
+             return Retorno.error3(); 
         }
 
-        Bicicleta bicicleta = new Bicicleta(codigo, tipo);
+        Bicicleta bicicleta = new Bicicleta(codigo, tipoBici);
 
-        if (bicicletasEnEstaciones.obtenerElemento(bicicleta) != null || bicicletasEnDeposito.obtenerElemento(bicicleta) != null) {
+        if (bicicletasEnEstaciones.obtenerElemento(bicicleta) != null 
+            || bicicletasEnDeposito.obtenerElemento(bicicleta) != null) 
+        {
             return Retorno.error4();
         }
 
@@ -158,10 +169,17 @@ public class Sistema implements IObligatorio {
         }
 
         if (!bicicleta.isEnDeposito()) {
+            Estacion estacion = bicicleta.getEstacionAsignada();
+            
             bicicletasEnEstaciones.borrarElemento(bicicleta);
             bicicletasEnDeposito.agregarOrd(bicicleta);
-            bicicleta.getEstacionAsignada().liberarAnclaje();
             bicicleta.setEstacionAsignada(null);
+            estacion.liberarAnclaje();
+            
+            if(!estacion.getColaEsperaAnclaje().esVacia()){
+                Bicicleta biciAAnclar = estacion.sacarBicicletaDeColaDeEsperaAnclaje();
+                anclarBicicletaEnEstacion(biciAAnclar, estacion);   
+            }
         }
 
         bicicleta.setEstado("Mantenimiento");
@@ -206,7 +224,6 @@ public class Sistema implements IObligatorio {
         if (estacion.getAnclajesOcupados() > 0
                 || !estacion.getColaEsperaAnclaje().esVacia()
                 || !estacion.getColaEsperaAlquiler().esVacia()) {
-            System.out.println("Viejo no podés: " + estacion.getColaEsperaAlquiler());
             return Retorno.error3();
         }
 
@@ -221,7 +238,6 @@ public class Sistema implements IObligatorio {
                 || codigo.isBlank()
                 || nombreEstacion == null
                 || nombreEstacion.isBlank()) {
-            System.out.println("ingresa bien los datos master");
             return Retorno.error1();
         }
 
@@ -304,10 +320,17 @@ public class Sistema implements IObligatorio {
             bicicleta.setEstacionAsignada(null);
             bicicleta.setEstado("Alquilada");
             bicicleta.setUsuarioAsignado(usuario);
-
+            contarAlquilerParaTipoBicicleta(bicicleta.getTipo());
+            
             Alquiler alquiler = new Alquiler(usuario.getCedula(), bicicleta.getCodigo(), estacion.getNombre());
             alquileresAsignados.push(alquiler);
             usuario.agregarAlquiler(alquiler);
+            
+            if(!estacion.getColaEsperaAnclaje().esVacia()){
+                Bicicleta biciAAnclar = estacion.sacarBicicletaDeColaDeEsperaAnclaje();
+                anclarBicicletaEnEstacion(biciAAnclar, estacion);   
+            }
+            
             return Retorno.ok("Alquiler exitoso");
         } else {
             estacion.ponerAlquilerEnColaDeEspera(new Alquiler(usuario.getCedula(), estacion.getNombre()));
@@ -352,21 +375,24 @@ public class Sistema implements IObligatorio {
         if (alquileresAsignados.cantElementos() == 0) {
             System.out.println("No hay alquileres para deshacer");
         } else {
+            String listaAlquileresDeshechos = "";
             int i = 0;
             while (i < n && alquileresAsignados.cantElementos() > 0) {
                 Alquiler alquilerDeshecho = alquileresAsignados.poptop();
                 Bicicleta biciDevuelta = encontrarBicicleta(alquilerDeshecho.getBicicleta());
                 Usuario usuario = encontrarUsuario(alquilerDeshecho.getUsuario());
                 Estacion estacionOrigen = encontrarEstacion(alquilerDeshecho.getEstacion());
-
+                
+                eliminarAlquilerParaTipoBicicleta(biciDevuelta.getTipo());
+                
                 pasarBicicletaDeAlquilerAEstacion(estacionOrigen, biciDevuelta);
                 usuario.eliminarAlquiler(alquilerDeshecho);
 
-                System.out.println(alquilerDeshecho + "|");
+                listaAlquileresDeshechos += alquilerDeshecho.toString() + "|";
 
                 i++;
             }
-
+            System.out.println(listaAlquileresDeshechos);
         }
         return Retorno.ok();
     }
@@ -470,7 +496,8 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno rankingTiposPorUso() {
-        return Retorno.noImplementada();
+        System.out.println(tiposDeBicicleta.devolverListaString());
+        return Retorno.ok(tiposDeBicicleta.devolverListaString());
     }
 
     @Override
@@ -561,22 +588,26 @@ public class Sistema implements IObligatorio {
 
             bicicleta.setUsuarioAsignado(usuarioAlquila);
             usuarioAlquila.agregarAlquiler(alquiler);
+            contarAlquilerParaTipoBicicleta(bicicleta.getTipo());
 
             System.out.println("La bicicleta " + bicicleta + " fue alquilada por un usuario en cola de espera");
 
         } else {
             if (estacionDestino.getAnclajesOcupados() == estacionDestino.getCapacidad()) {
                 estacionDestino.ponerBicicletaEnColaDeEsperaAnclaje(bicicleta);
-
             } else {
+                anclarBicicletaEnEstacion(bicicleta, estacionDestino);
+            }
+        }
+    }
+    
+    public void anclarBicicletaEnEstacion(Bicicleta bicicleta, Estacion estacionDestino){
                 bicicleta.setEstacionAsignada(estacionDestino);
                 bicicleta.setEstado("Disponible");
                 bicicleta.setUsuarioAsignado(null);
 
                 estacionDestino.ocuparAnclaje();
                 System.out.println("La bicicleta " + bicicleta + " fue anclada en la " + estacionDestino + " exitosamente.");
-            }
-        }
     }
     
     public Barrio encontrarBarrio(String nombre){
@@ -602,6 +633,25 @@ public class Sistema implements IObligatorio {
             barrios.borrarElemento(barrio);
         }
     }
+    
+    public void llenarListaTiposDeBicicleta(){
+        tiposDeBicicleta.agregarOrd(new TipoBicicleta(TipoBiciEnum.URBANA));
+        tiposDeBicicleta.agregarOrd(new TipoBicicleta(TipoBiciEnum.MOUNTAIN));
+        tiposDeBicicleta.agregarOrd(new TipoBicicleta(TipoBiciEnum.ELECTRICA));
+    }
+    
+    public void contarAlquilerParaTipoBicicleta(TipoBiciEnum nombre){
+        TipoBicicleta tipo = tiposDeBicicleta.obtenerElemento(new TipoBicicleta(nombre));
+        int cantAlquileres = tipo.getCantAlquileres();
+        tipo.setCantAlquileres(cantAlquileres + 1);
+    }
+    
+    public void eliminarAlquilerParaTipoBicicleta(TipoBiciEnum nombre){
+        TipoBicicleta tipo = tiposDeBicicleta.obtenerElemento(new TipoBicicleta(nombre));
+        int cantAlquileres = tipo.getCantAlquileres();
+        tipo.setCantAlquileres(cantAlquileres - 1);
+    }
+    
     
 // =================================================
     // Para Tests

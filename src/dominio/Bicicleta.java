@@ -3,7 +3,7 @@ package dominio;
 public class Bicicleta implements Comparable {
 
     private String codigo;
-    private String tipo;
+    private TipoBiciEnum tipo;
     private String estado; //Alquilada, Mantenimiento, Disponible
     private Estacion estacionAsignada;
     private Usuario usuarioAsignado;
@@ -18,11 +18,11 @@ public class Bicicleta implements Comparable {
         this.codigo = codigo;
     }
 
-    public String getTipo() {
+    public TipoBiciEnum getTipo() {
         return tipo;
     }
 
-    public void setTipo(String tipo) {
+    public void setTipo(TipoBiciEnum tipo) {
         this.tipo = tipo;
     }
 
@@ -70,7 +70,7 @@ public class Bicicleta implements Comparable {
         this.motivoDeMantenimiento = null;
     }
 
-    public Bicicleta(String codigo, String tipo) {
+    public Bicicleta(String codigo, TipoBiciEnum tipo) {
         this.codigo = codigo;
         this.tipo = tipo;
         this.estado = "Disponible";
@@ -79,7 +79,7 @@ public class Bicicleta implements Comparable {
         this.motivoDeMantenimiento = null;
     }
 
-    public Bicicleta(String codigo, String tipo, String estado) {
+    public Bicicleta(String codigo, TipoBiciEnum tipo, String estado) {
         this.codigo = codigo;
         this.tipo = tipo;
         this.estado = estado;
@@ -106,7 +106,7 @@ public class Bicicleta implements Comparable {
 
     @Override
     public String toString() {
-        return codigo + "#" + tipo + "#" + estado;
+        return codigo + "#" + tipo.name() + "#" + estado;
     }
 
 }

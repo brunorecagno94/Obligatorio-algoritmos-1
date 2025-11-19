@@ -1,4 +1,0 @@
-build/
-nbproject/private/
-nbproject/build-impl.xml
-build.xml
