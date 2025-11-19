@@ -75,13 +75,17 @@ public class Usuario implements Comparable {
     public void agregarAlquiler(Alquiler alquiler){
         this.alquileres.agregarOrd(alquiler);
     }
+
+    public int getCantidadAlquileres() {
+        return this.alquileres.cantElementos();
+    }
     
     public void mostrarAlquileres(){
-        if(alquileres.cantElementos() == 0){
+        if(this.alquileres.cantElementos() == 0){
             System.out.println("El usuario no tiene alquileres");
         }else{
             for(int i=0; i < this.alquileres.cantElementos(); i++){
-            System.out.println(alquileres.obtenerElementoEnPosicion(i));
+            System.out.println(this.alquileres.obtenerElementoEnPosicion(i));
             }
         }      
     }
@@ -89,5 +93,4 @@ public class Usuario implements Comparable {
     public void eliminarAlquiler(Alquiler alquiler){
         alquileres.borrarElemento(alquiler);
     }
-
 }

@@ -480,9 +480,21 @@ public class Sistema implements IObligatorio {
         return Retorno.ok(estacion.mostrarUsuariosEnEspera());
     }
 
-    @Override
+@Override
     public Retorno usuarioMayor() {
-        return Retorno.noImplementada();
+        String cedulaMayor = "No hay usuarios con alquileres aun";
+        int cantAlquileres = 0;
+
+        for (int i = 0; i < usuarios.cantElementos(); i++) {
+            Usuario usuario = usuarios.obtenerElementoEnPosicion(i);
+            
+            if (usuario.getCantidadAlquileres() > cantAlquileres) {
+                cedulaMayor = usuario.getCedula();
+                cantAlquileres = usuario.getCantidadAlquileres();
+            }
+        }
+
+        return Retorno.ok(cedulaMayor);
     }
 
     // =================================================
