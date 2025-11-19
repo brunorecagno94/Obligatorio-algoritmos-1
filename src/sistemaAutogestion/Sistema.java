@@ -466,7 +466,7 @@ public class Sistema implements IObligatorio {
 
         for (int i = 0; i < usuarios.cantElementos(); i++) {
             Usuario usuario = usuarios.obtenerElementoEnPosicion(i);
-                System.out.println("Pasada " + i + ": " + usuario.getCedula() + ", alquileres: " + usuario.getCantidadAlquileres());
+            
             if (usuario.getCantidadAlquileres() > cantAlquileres) {
                 cedulaMayor = usuario.getCedula();
                 cantAlquileres = usuario.getCantidadAlquileres();
