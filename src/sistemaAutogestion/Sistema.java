@@ -9,7 +9,6 @@ import tads.ColaNodos;
 import dominio.*;
 import java.util.HashSet;
 import java.util.Set;
-import tads.PilaNodos;
 
 //Bruno Recagno-333245, Victoria Calvo-339977
 public class Sistema implements IObligatorio {
@@ -443,13 +442,12 @@ public class Sistema implements IObligatorio {
         }else{
             for(int i=0; i<barrios.cantElementos(); i++){
                 Barrio barrio = barrios.obtenerElementoEnPosicion(i);
-                ListaNodos<Estacion> estacionesDelBarrio = barrio.getEstaciones();
                 
                 int bicisAncladas = 0;
                 int capacidadTotal =0;
                 
-                for(int n=0; n < estacionesDelBarrio.cantElementos(); n++){
-                    Estacion estacion = estacionesDelBarrio.obtenerElementoEnPosicion(n);
+                for(int n=0; n < barrio.getEstaciones().cantElementos(); n++){
+                    Estacion estacion = barrio.getEstaciones().obtenerElementoEnPosicion(n);
                     
                     bicisAncladas += estacion.getAnclajesOcupados();
                     capacidadTotal += estacion.getCapacidad();                   
