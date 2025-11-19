@@ -1,10 +1,11 @@
 package dominio;
 
-public class Alquiler implements Comparable{
+public class Alquiler implements Comparable {
+
     private static int id = 0;
     private String usuario;
     private String bicicleta;
-    private String estacion;    
+    private String estacion;
 
     public static int getId() {
         return id;
@@ -38,7 +39,6 @@ public class Alquiler implements Comparable{
         this.estacion = estacion;
     }
 
-    
     public Alquiler(String usuario, String estacion) {
         this.usuario = usuario;
         this.bicicleta = null;
@@ -53,19 +53,24 @@ public class Alquiler implements Comparable{
 
     @Override
     public int compareTo(Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Alquiler other = (Alquiler) o;
+        return this.usuario.compareTo(other.usuario);
     }
-    
+
     @Override
-    public String toString(){
-        return bicicleta +"#"+usuario+"#"+estacion;
+    public String toString() {
+        return bicicleta + "#" + usuario + "#" + estacion;
     }
-    
+
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) return true;            
-        if (obj == null) return false; 
-        
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+
         Alquiler a2 = (Alquiler) obj;
         return this.getId() == (a2.getId());
     }

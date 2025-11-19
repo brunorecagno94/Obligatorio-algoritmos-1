@@ -34,24 +34,32 @@ public class Sistema implements IObligatorio {
         Sistema s = new Sistema();
         s.registrarUsuario("12345678", "Juan");
         s.registrarUsuario("22345628", "Juana");
-        s.registrarUsuario("32345688", "Juanelo");
+        s.registrarUsuario("72345688", "Juanelo");
 
         s.registrarBicicleta("123456", "MOUNTAIN");
-        s.registrarBicicleta("789123", "URBANA");
+        s.registrarBicicleta("987654", "URBANA");
+        s.registrarBicicleta("456789", "URBANA");
+        s.registrarBicicleta("765432", "URBANA");
+        s.registrarBicicleta("173563", "URBANA");
+        s.registrarBicicleta("358346", "URBANA");
 
-        s.registrarEstacionConAnclajes("Estacion1", "Cordon", 20, 0);
-        s.registrarEstacionConAnclajes("Estacion2", "Centro", 20, 0);
-        s.registrarEstacionConAnclajes("Estacion3", "Carrasco", 20, 0);
+        s.registrarEstacion("Estacion1", "Cordon", 20);
 
-//        s.asignarBicicletaAEstacion("123456", "Estacion1");
-        System.out.println("Alquilo bicis:");
-        s.alquilarBicicleta("12345678", "Estacion1");
-        s.alquilarBicicleta("12345678", "Estacion1");
-        s.alquilarBicicleta("12345678", "Estacion1");
-//        s.alquilarBicicleta("3234568", "Estacion1");
-//        s.alquilarBicicleta("2234562", "Estacion1");
-
-        s.usuariosEnEspera("Estacion1");
+        s.asignarBicicletaAEstacion("123456", "Estacion1");
+        s.asignarBicicletaAEstacion("987654", "Estacion1");
+        s.asignarBicicletaAEstacion("456789", "Estacion1");
+        s.asignarBicicletaAEstacion("765432", "Estacion1");
+        s.asignarBicicletaAEstacion("173563", "Estacion1");
+        s.asignarBicicletaAEstacion("358346", "Estacion1");
+        
+        s.alquilarBicicleta("22345628", "Estacion1");
+        s.alquilarBicicleta("22345628", "Estacion1");
+        s.alquilarBicicleta("22345628", "Estacion1");
+        s.alquilarBicicleta("72345688", "Estacion1");
+        s.alquilarBicicleta("72345688", "Estacion1");
+        s.alquilarBicicleta("72345688", "Estacion1");
+        
+        s.usuarioMayor();
     }
 
     @Override
@@ -453,16 +461,19 @@ public class Sistema implements IObligatorio {
 
     @Override
     public Retorno usuarioMayor() {
-        String cedulaMayor = "";
-        int contAlquileres = 0;
+        String cedulaMayor = "No hay usuarios con alquileres aun";
+        int cantAlquileres = 0;
 
         for (int i = 0; i < usuarios.cantElementos(); i++) {
             Usuario usuario = usuarios.obtenerElementoEnPosicion(i);
-            if (usuario.getCantidadAlquileres() > contAlquileres) {
+                System.out.println("Pasada " + i + ": " + usuario.getCedula() + ", alquileres: " + usuario.getCantidadAlquileres());
+            if (usuario.getCantidadAlquileres() > cantAlquileres) {
                 cedulaMayor = usuario.getCedula();
+                cantAlquileres = usuario.getCantidadAlquileres();
             }
         }
 
+        System.out.println(cedulaMayor);
         return Retorno.ok(cedulaMayor);
     }
 
