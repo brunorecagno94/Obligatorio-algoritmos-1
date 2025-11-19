@@ -37,33 +37,6 @@ public class Sistema implements IObligatorio {
     }
 
     public static void main(String[] args) {
-        Sistema s = new Sistema();
-        s.registrarUsuario("12345678", "Juan");
-        s.registrarUsuario("22345628", "Juana");
-        s.registrarUsuario("32345688", "Juanelo");
-
-        s.registrarBicicleta("123456", "MOUNTAIN");
-        s.registrarBicicleta("789123", "URBANA");
-        s.registrarBicicleta("345678", "URBANA");
-        s.registrarEstacionConAnclajes("Estacion1", "Cordon", 20, 10);
-        s.registrarEstacionConAnclajes("Estacion2", "Centro", 20, 5);
-        s.registrarEstacionConAnclajes("Estacion3", "Carrasco", 20, 0);
-        s.asignarBicicletaAEstacion("123456", "Estacion2");
-        s.asignarBicicletaAEstacion("789123", "Estacion1");
-        s.asignarBicicletaAEstacion("345678", "Estacion3");
-        
-        s.alquilarBicicleta("22345628", "Estacion1");
-        s.alquilarBicicleta("32345688", "Estacion2");
-        s.alquilarBicicleta("12345678", "Estacion3");
-        s.eliminarEstacion("Estacion3");
-        
-        s.estaciones.mostrar();
-        s.bicicletasEnEstaciones.mostrar();
-        s.tiposDeBicicleta.mostrar();
-        System.out.println(".----");
-        s.ocupacionPromedioXBarrio();
-        s.rankingTiposPorUso();
-    
     }
 
     @Override
@@ -392,7 +365,6 @@ public class Sistema implements IObligatorio {
 
                 i++;
             }
-            System.out.println(listaAlquileresDeshechos);
         }
         return Retorno.ok();
     }
@@ -412,7 +384,6 @@ public class Sistema implements IObligatorio {
             return Retorno.error3();
         }
 
-        System.out.println(usuarioBuscado);
         return Retorno.ok(usuarioBuscado.toString());
     }
 
@@ -441,7 +412,7 @@ public class Sistema implements IObligatorio {
                 listaEstaciones += bicicleta.getCodigo() + "|";
             }
         }
-        System.out.println(listaEstaciones);
+        
         return Retorno.ok(listaEstaciones);
     }
 
@@ -458,12 +429,10 @@ public class Sistema implements IObligatorio {
             Estacion estacion = estaciones.obtenerElementoEnPosicion(i);
 
             if (estacion.getAnclajesOcupados() > n) {
-                System.out.println("+1 estacion");
                 cantidadEstaciones++;
             }
         }
 
-        System.out.println(cantidadEstaciones);
         return Retorno.ok(cantidadEstaciones + "");
     }
 
@@ -490,20 +459,17 @@ public class Sistema implements IObligatorio {
                 barrio.setPorcentajeOcupacion((int) Math.round(porcentaje));
             }           
         }      
-        System.out.println(barrios.devolverListaString());
         return Retorno.ok();
     }
 
     @Override
     public Retorno rankingTiposPorUso() {
-        System.out.println(tiposDeBicicleta.devolverListaString());
         return Retorno.ok(tiposDeBicicleta.devolverListaString());
     }
 
     @Override
     public Retorno usuariosEnEspera(String nombreEstacion) {
         Estacion estacion = estaciones.obtenerElemento(new Estacion(nombreEstacion));
-        System.out.println(estacion.mostrarUsuariosEnEspera());
         return Retorno.ok(estacion.mostrarUsuariosEnEspera());
     }
 
