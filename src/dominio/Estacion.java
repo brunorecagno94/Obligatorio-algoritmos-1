@@ -63,7 +63,9 @@ public class Estacion implements Comparable {
     }
 
     public Estacion() {
-    };
+    }
+
+    ;
     
     public Estacion(String nombre) {
         this.nombre = nombre;
@@ -79,7 +81,7 @@ public class Estacion implements Comparable {
     }
 
     // Constructor para test
-        public Estacion(String nombre, String barrio, int capacidad, int anclajesOcupados) {
+    public Estacion(String nombre, String barrio, int capacidad, int anclajesOcupados) {
         this.nombre = nombre;
         this.barrio = barrio;
         this.capacidad = capacidad;
@@ -87,7 +89,7 @@ public class Estacion implements Comparable {
         this.colaEsperaAlquiler = new ColaNodos<Alquiler>();
         this.colaEsperaAnclaje = new ColaNodos<Bicicleta>();
     }
-        
+
     // Metodos
     @Override
     public String toString() {
@@ -108,42 +110,66 @@ public class Estacion implements Comparable {
         Estacion e2 = (Estacion) obj;
         return this.nombre.equals(e2.nombre);
     }
-    
-    public void ponerAlquilerEnColaDeEspera(Alquiler alquiler){
-        if(this.colaEsperaAlquiler.esLlena()){
+
+    public void ponerAlquilerEnColaDeEspera(Alquiler alquiler) {
+        if (this.colaEsperaAlquiler.esLlena()) {
             System.out.println("No hay lugar en la cola de espera, debes intentar alquilar más tarde");
-        }else{
+        } else {
             this.colaEsperaAlquiler.encolar(alquiler);
             System.out.println("Alquiler en cola de espera");
-        }       
+        }
     }
-    
-    public Alquiler sacarAlquilerDeColaDeEspera(){
+
+    public Alquiler sacarAlquilerDeColaDeEspera() {
         Alquiler alquiler = this.colaEsperaAlquiler.frente();
         colaEsperaAlquiler.desencolar();
-        return alquiler;      
+        return alquiler;
     }
-    
+
     public void ocuparAnclaje() {
         this.anclajesOcupados++;
     }
-    
+
     public void liberarAnclaje() {
         this.anclajesOcupados--;
     }
-    
-    public void ponerBicicletaEnColaDeEsperaAnclaje(Bicicleta bicicleta){
-        if(this.colaEsperaAnclaje.esLlena()){
+
+    public void ponerBicicletaEnColaDeEsperaAnclaje(Bicicleta bicicleta) {
+        if (this.colaEsperaAnclaje.esLlena()) {
             System.out.println("No hay lugar en la cola de espera, debes intentar más tarde");
-        }else{
+        } else {
             this.colaEsperaAnclaje.encolar(bicicleta);
-            System.out.println("Bicicleta " + bicicleta + " en cola de espera de anclaje");
+            System.out.println("Bicicleta en cola de espera de anclaje");
         }
     }
-    
-    public Bicicleta sacarBicicletaDeColaDeEsperaAnclaje(){
+
+    public Bicicleta sacarBicicletaDeColaDeEsperaAnclaje() {
         Bicicleta bicicleta = this.colaEsperaAnclaje.frente();
         colaEsperaAnclaje.desencolar();
         return bicicleta;
+    }
+
+    public String mostrarUsuariosEnEspera() {
+        String listaUsuariosEspera = "";
+        
+        if (this.colaEsperaAlquiler.esVacia()) {
+            listaUsuariosEspera = "No hay usuarios en espera";
+        } else {
+            ColaNodos<Alquiler> colaAuxiliar = new ColaNodos<>();
+
+            while (!this.colaEsperaAlquiler.esVacia()) {
+                Alquiler alquiler = this.colaEsperaAlquiler.frente();
+                listaUsuariosEspera += alquiler.getUsuario() + "|";
+
+                colaAuxiliar.encolar(alquiler);
+                this.colaEsperaAlquiler.desencolar();
+            }
+
+            while (!colaAuxiliar.esVacia()) {
+                this.colaEsperaAlquiler.encolar(colaAuxiliar.frente());
+                colaAuxiliar.desencolar();
+            }
+        }
+        return listaUsuariosEspera;
     }
 }
