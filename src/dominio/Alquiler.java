@@ -51,9 +51,10 @@ public class Alquiler implements Comparable{
         this.estacion = estacion;
     }
 
-    @Override
+   @Override
     public int compareTo(Object o) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        Alquiler other = (Alquiler) o;
+        return this.usuario.compareTo(other.usuario);
     }
     
     @Override
